@@ -1,113 +1,106 @@
-import Image from 'next/image'
+import Image from "next/image";
+import Link from "next/link";
+
+import BaseLayout from "src/layouts/base";
+import BoxGraphic from "src/components/BoxGraphic";
+import { awsUrl } from "src/util";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+    <BaseLayout>
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8">
+        <div>
+          <h1 className="mb-4 sm:mb-8 max-w-xl">
+            I'm Greyson, an artist and computer science student.
+          </h1>
+          <p className="max-w-sm mb-4">
+            Hey! I was born in Baltimore, Maryland, and raised in Southern York,
+            Pennsylvania. I’m currently a senior pursuing a degree in computer
+            science at Penn State University. Outside of CS I spend my time playing
+            soccer, cheffing up new recipes, and creating art.
+          </p>
+          <div className="flex gap-x-2">
+            <ContactIcon
+              name="linkedin"
+              href="https://www.linkedin.com/in/greyson-murray/"
             />
-          </a>
+            <ContactIcon
+              name="github"
+              href="https://github.com/greydevv"
+            />
+            <ContactIcon
+              name="stackoverflow"
+              href="https://stackoverflow.com/users/12326283/gmdev"
+            />
+            <ContactIcon
+              name="mail"
+              href="mailto:greyson.murray@gmail.com"
+            />
+          </div>
+        </div>
+        <BoxGraphic className="aspect-[4/5]">
+          <Image
+            src={ awsUrl("me/me.jpg") }
+            alt="Headshot of me"
+            fill
+            className="object-cover"
+          />
+        </BoxGraphic>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-[300px_1fr] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8">
+        <BoxGraphic className="aspect-square" left>
+          <Image
+            src={ awsUrl("me/kid_me.jpg") }
+            alt="Headshot of younger me"
+            fill
+            className="object-cover"
+          />
+        </BoxGraphic>
+        <div>
+          <h1 className="mb-4 sm:mb-8 max-w-xl">
+            About Me
+          </h1>
+          <div className="flex flex-col gap-y-4 max-w-sm">
+            <p>
+              From a young age, I’ve always been fascinated by art. I spent much
+              of my childhood drawing and painting, in and out of art classes.
+              There is something about creating something from nothing that
+              resonates with me.
+            </p>
+            <p>
+              When I was introduced to my first computer, I was hooked – I
+              instantly found ways to combine my love for art and new obsession
+              with technology. Hours were spent programming simple video games on
+              Scratch and listing them publicly for others to play.
+            </p>
+            <p>
+              In high school, I picked up 3D modeling and VFX in Blender.
+              Intrigued by the extensibility of Blender, I found myself motivated
+              to enhance my experience and began learning Python with the intent
+              of developing Blender plugins. For me, that was the catalyst into
+              computer science. Since then, computer science has become my
+              passion, study, and career.
+            </p>
+          </div>
         </div>
       </div>
+    </BaseLayout>
+  )
+}
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+interface ContactIconProps {
+  readonly name: string
+  readonly href: string
+}
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+function ContactIcon(props: ContactIconProps) {
+  return (
+    <Link href={ props.href } target="_blank">
+      <Image
+        src={ `/icons/${props.name}.svg` }
+        height="24"
+        width="24"
+      />
+    </Link>
   )
 }
