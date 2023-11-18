@@ -9,15 +9,15 @@ export default function Home() {
   return (
     <BaseLayout>
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8">
-        <div>
-          <h1 className="mb-4 sm:mb-8 max-w-xl">
-            I'm Greyson, an artist and computer science student.
+        <div className="row-start-2 sm:row-start-1 col-start-1">
+          <h1 className="mb-4 max-w-xl">
+            I’m Greyson, an artist and computer science student. 
           </h1>
           <p className="max-w-sm mb-4">
-            Hey! I was born in Baltimore, Maryland, and raised in Southern York,
-            Pennsylvania. I’m currently a senior pursuing a degree in computer
-            science at Penn State University. Outside of CS I spend my time playing
-            soccer, cheffing up new recipes, and creating art.
+            Hey! I was born in Baltimore, Maryland, and raised in Southern
+            York, Pennsylvania. I’m currently a senior pursuing a degree in
+            computer science at Penn State University. Outside of CS I spend my
+            time playing soccer, cheffing up new recipes, and creating art.
           </p>
           <div className="flex gap-x-2">
             <ContactIcon
@@ -38,7 +38,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <BoxGraphic className="aspect-[4/5]">
+        <BoxGraphic className="aspect-[4/5] mb-12 sm:mb-0 row-start-1 sm:col-start-2">
           <Image
             src={ awsUrl("me/me.jpg") }
             alt="Headshot of me"
@@ -48,7 +48,10 @@ export default function Home() {
         </BoxGraphic>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-[300px_1fr] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8">
-        <BoxGraphic className="aspect-square" left>
+        <BoxGraphic
+          className="aspect-square mb-12 sm:mb-0"
+          left
+        >
           <Image
             src={ awsUrl("me/kid_me.jpg") }
             alt="Headshot of younger me"
@@ -57,7 +60,7 @@ export default function Home() {
           />
         </BoxGraphic>
         <div>
-          <h1 className="mb-4 sm:mb-8 max-w-xl">
+          <h1 className="mb-4 max-w-xl">
             About Me
           </h1>
           <div className="flex flex-col gap-y-4 max-w-sm">
@@ -85,7 +88,7 @@ export default function Home() {
         </div>
       </div>
     </BaseLayout>
-  )
+  );
 }
 
 interface ContactIconProps {
@@ -100,7 +103,8 @@ function ContactIcon(props: ContactIconProps) {
         src={ `/icons/${props.name}.svg` }
         height="24"
         width="24"
+        alt={ `Icon for ${props.name}` }
       />
     </Link>
-  )
+  );
 }

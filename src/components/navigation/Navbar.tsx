@@ -10,12 +10,10 @@ interface NavbarProps {
 
 export default function Navbar(props: NavbarProps) {
   return (
-    <div className="z-50 left-0 top-0 w-full row-start-1 col-start-1 sticky bg-light w-full">
-      <div className="flex justify-center md:justify-start border-box gap-x-5 items-center py-8">
-        { props.children }
-      </div>
+    <div className="flex justify-center sm:justify-start border-box gap-x-5 items-center py-8">
+      { props.children }
     </div>
-  )
+  );
 }
 
 interface NavbarItemProps {
@@ -40,5 +38,5 @@ export function NavItem(props: NavbarItemProps) {
     >
       { props.labelText }
     </Link>
-  )
+  );
 }
