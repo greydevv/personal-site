@@ -8,7 +8,7 @@ import { awsUrl } from "src/util";
 export default function Home() {
   return (
     <BaseLayout>
-      <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8 sm:mb-16">
         <div className="row-start-2 sm:row-start-1 col-start-1">
           <h1 className="mb-4 max-w-xl">
             I’m Greyson, an artist and computer science student. 

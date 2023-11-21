@@ -23,11 +23,11 @@ export default function WorkItem(props: WorkItemProps) {
   return (
     <div className="flex flex-col max-w-lg">
       { showTags &&
-        <p className="text-grey font-normal font-karla">
+        <p className="attribute text-grey">
           { props.tags.join(" • ") }
         </p>
       }
-      <div className={ makeCls("relative flex gap-x-2 mb-2 mr-auto items-center", [[hasLink, "group", ""]])}>
+      <div className={ makeCls("relative flex gap-x-2 mb-2 mr-auto items-center", [hasLink, "group"])}>
         { hasLogoSrc &&
           <Image
             className="static z-[2] w-6 h-6"
@@ -65,7 +65,6 @@ interface WorkItemLinkProps {
 }
 
 function WorkItemLink(props: WorkItemLinkProps) {
-  // y s 3 t <space> b
   if (props.href !== undefined) {
     return (
       <Link

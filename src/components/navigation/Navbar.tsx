@@ -19,6 +19,7 @@ export default function Navbar(props: NavbarProps) {
 interface NavbarItemProps {
   readonly labelText: string
   readonly href: string
+  readonly graphic: ReactElement
 }
 
 export function NavItem(props: NavbarItemProps) {
@@ -26,17 +27,20 @@ export function NavItem(props: NavbarItemProps) {
   const isActive = pathname === props.href;
 
   const cls = makeCls("text-lg text-center font-karla",
-    [
       [isActive, "text-dark", "text-grey"]
-    ]
   );
 
   return (
-    <Link
-      href={ props.href }
-      className={ cls }
-    >
-      { props.labelText }
-    </Link>
+    <div className="relative">
+      <Link
+        href={ props.href }
+        className={ cls }
+      >
+        { props.labelText }
+      </Link>
+      { isActive &&
+        props.graphic
+      }
+    </div>
   );
 }

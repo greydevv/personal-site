@@ -47,7 +47,7 @@ function parseWorks(rawWorks: object[]) {
       workItem.logoSrc = awsUrl(`logos/${work.logo}.png`);
     } else if (!!work.github) {
       workItem.logoSrc = "/icons/github.svg";
-      workItem.siteHref = work.github;
+      workItem.siteHref = `https://www.github.com/${work.github}`;
     }
     if (!!work.site) {
       if (!!!work.logo) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 import { makeCls } from "src/util";
 
@@ -22,24 +23,50 @@ export default function WorkTab(props: WorkTabProps) {
     props.onChangeTab(tab);
   };
 
+  interface TabIconProps { iconSrc: string }
+
+  const TabIcon = (props: TabIconProps) => {
+    return (
+        <div className="absolute -left-4 -bottom-2 w-12 h-10 sm:h-12 z-[1]">
+          <Image
+            src={ props.iconSrc }
+            className="relative"
+            fill
+          />
+        </div>
+    );
+  };
+
   return (
-      <div className="flex justify-center sm:justify-start gap-x-8 relative mb-10">
-        <button
-          onClick={ () => { userClickedTab(Tab.Experience); } }
-          disabled={ tab === Tab.Experience }
-        >
-          <h2 className={ makeCls("", [[tab === Tab.Experience, "pointer-default", "pointer-cursor text-red-20"]]) }>
-            { Tab.Experience }
-          </h2>
-        </button>
-        <button
-          onClick={ () => { userClickedTab(Tab.Projects); } }
-          disabled={ tab === Tab.Projects }
-        >
-          <h2 className={ makeCls("pointer-events-none", [[tab === Tab.Projects, "pointer-default", "pointer-cursor text-red-20"]]) }>
-            { Tab.Projects }
-          </h2>
-        </button>
+      <div className="flex justify-center sm:justify-start gap-x-8 mb-10">
+        <div className="relative">
+          <button
+            className="relative z-[2]"
+            onClick={ () => { userClickedTab(Tab.Experience); } }
+            disabled={ tab === Tab.Experience }
+          >
+            <h2 className={ makeCls("pointer-events-none", [tab === Tab.Experience, "pointer-default", "pointer-cursor text-red-20"]) }>
+              { Tab.Experience }
+            </h2>
+          </button>
+          { tab === Tab.Experience &&
+            <TabIcon iconSrc={ "/icons/bookmark.svg" } />
+          }
+        </div>
+        <div className="relative">
+          <button
+            className="relative z-[2]"
+            onClick={ () => { userClickedTab(Tab.Projects); } }
+            disabled={ tab === Tab.Projects }
+          >
+            <h2 className={ makeCls("pointer-events-none", [tab === Tab.Projects, "pointer-default", "pointer-cursor text-red-20"]) }>
+              { Tab.Projects }
+            </h2>
+          </button>
+          { tab === Tab.Projects &&
+            <TabIcon iconSrc={ "/icons/document.svg" } />
+          }
+        </div>
       </div>
   );
 }

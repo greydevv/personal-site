@@ -28,7 +28,6 @@ export default function WorkItemList(props: WorkItemListProps) {
       <WorkTab
         defaultTab={ Tab.Experience }
         onChangeTab={ (tab) => setTab(tab) }
-        workItems={ {} }
       />
       <div className="flex flex-col gap-y-6 sm:gap-y-8">
         { items.map(([year, workItems], i) => {

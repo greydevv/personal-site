@@ -11,6 +11,7 @@ interface BlogItemProps {
   tags: string[]
   featured: boolean
   thumbnailSrc?: string
+  thumbnailAlt?: string
 }
 
 export default function BlogItem(props: BlogItemProps) {
@@ -18,9 +19,9 @@ export default function BlogItem(props: BlogItemProps) {
 
   return (
     <Link href={ linkHref }>
-      <div className="group cursor-pointer border border-red-10 p-6 transition-all ease-in-out duration-250 md:hover:pl-12 hover:bg-red-10">
-        <div className="flex md:flex-col justify-between md:start-center">
-          <p className="text-grey text-base font-karla group-hover:text-red-30 transition-all ease-in-out duration-250">
+      <div className="group cursor-pointer border border-red-10 px-4 py-2 sm:p-6 transition-all ease-in-out duration-250 md:hover:pl-12 hover:bg-red-10">
+        <div>
+          <p className="attribute text-grey group-hover:text-red transition-all ease-in-out duration-250">
             { formatDate(props.date) }
           </p>
           <h3>

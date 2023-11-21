@@ -20,7 +20,7 @@
 }
 
 body {
-  @apply bg-light overflow-y-scroll;
+  @apply bg-light overflow-y-scroll text-dark;
 }
 
 h1 {
@@ -32,9 +32,21 @@ h2 {
 }
 
 h3 {
-  @apply text-xl sm:text-2xl font-karla font-medium; 
+  @apply text-xl sm:text-2xl font-karla font-bold sm:font-medium; 
+}
+
+h4 {
+  @apply text-lg sm:text-lg font-karla font-medium;
+}
+
+h5 {
+  @apply font-karla font-bold;
 }
 
 p {
   @apply font-inter font-light;
+}
+
+p.attribute {
+  @apply text-base font-karla font-normal;
 }

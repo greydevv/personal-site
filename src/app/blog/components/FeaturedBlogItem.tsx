@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
+import { BlogItemProps } from "src/app/blog/components/BlogItem";
 import BoxGraphic from "src/components/BoxGraphic";
 import BlogTags from "src/app/blog/components/BlogTags";
 import { awsUrl, formatDate } from "src/util";
@@ -10,8 +11,8 @@ export default function FeaturedBlogItem(props: BlogItemProps) {
   return (
     <Link href={ linkHref } className="mb-8">
       <div className="cursor-pointer grid md:grid-cols-[1fr_300px] md:grid-rows-1 grid-cols-1 grid-rows-[300px_1fr] gap-x-8 gap-y-8 group">
-        <div className="col-start-1 md:row-start-1 row-start-2 py-5 transition-all duration-250 md:group-hover:pl-4 md:px-0 px-6">
-          <p className="text-grey text-base font-karla">
+        <div className="col-start-1 md:row-start-1 row-start-2 py-5 transition-all duration-250 md:group-hover:pl-4">
+          <p className="attribute text-grey">
             { formatDate(props.date) }
           </p>
           <h2 className="max-w-lg">
@@ -33,6 +34,7 @@ export default function FeaturedBlogItem(props: BlogItemProps) {
             <Image
               src={ awsUrl(`blogs/${props.slug}.png`) }
               fill
+              alt={ props.thumbnailAlt }
             />
           </div>
         </BoxGraphic>
