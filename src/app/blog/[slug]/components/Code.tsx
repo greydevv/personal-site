@@ -20,5 +20,5 @@ export default function Code(props: CodeProps) {
     >
       { props.code }
     </SyntaxHighlighter>
-  )
+  );
 }

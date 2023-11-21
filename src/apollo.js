@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
-import * as Realm from "realm-web"
+import * as Realm from "realm-web";
 
 async function getAccessToken() {
   const realmApp = new Realm.App(process.env.NEXT_PUBLIC_REALM_APP_ID);

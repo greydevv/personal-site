@@ -54,7 +54,7 @@ export default function Home() {
         >
           <Image
             src={ awsUrl("me/kid_me.jpg") }
-            alt="Headshot of younger me"
+            alt="Headshot of a younger me"
             fill
             className="object-cover"
           />
@@ -101,9 +101,9 @@ function ContactIcon(props: ContactIconProps) {
     <Link href={ props.href } target="_blank">
       <Image
         src={ `/icons/${props.name}.svg` }
+        alt=""
         height="24"
         width="24"
-        alt={ `Icon for ${props.name}` }
       />
     </Link>
   );

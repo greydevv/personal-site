@@ -24,7 +24,7 @@ const awsUrl = (path: string): string => {
 
 const formatDate = (date): string => {
   return moment(date).format("MMM. DD, YYYY");
-}
+};
 
 export {
   makeCls,

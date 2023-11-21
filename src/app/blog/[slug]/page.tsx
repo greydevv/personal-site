@@ -30,6 +30,7 @@ export default async function BlogPost(serverProps: BlogPostProps) {
           <Link href="/blog">
             <Image
               src="/icons/back_arrow.svg"
+              alt="Back arrow"
               height="13"
               width="26"
             />
@@ -56,7 +57,7 @@ export default async function BlogPost(serverProps: BlogPostProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 async function getData(slug: string): BlogPostProps {
@@ -91,5 +92,5 @@ async function getData(slug: string): BlogPostProps {
   return {
     ...data.blog,
     body: data.blog.body.replace(/\\n/g, "  \n")
-  }
+  };
 }

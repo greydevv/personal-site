@@ -15,7 +15,7 @@ interface BlogItemProps {
 }
 
 export default function BlogItem(props: BlogItemProps) {
-  const linkHref = `/blog/${props.slug}`
+  const linkHref = `/blog/${props.slug}`;
 
   return (
     <Link href={ linkHref }>

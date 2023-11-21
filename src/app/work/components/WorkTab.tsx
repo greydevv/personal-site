@@ -30,6 +30,7 @@ export default function WorkTab(props: WorkTabProps) {
         <div className="absolute -left-4 -bottom-2 w-12 h-10 sm:h-12 z-[1]">
           <Image
             src={ props.iconSrc }
+            alt=""
             className="relative"
             fill
           />
