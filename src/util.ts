@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const makeCls = (staticCls: string, ...dynamicCls: [boolean, string, string?][]): string => {
+const makeCls = (staticCls: string, ...dynamicCls: [boolean | undefined | null, string, string?][]): string => {
   let clsName = staticCls;
   for (var cls of dynamicCls) {
       if (cls[0]) {
@@ -22,7 +22,7 @@ const awsUrl = (path: string): string => {
   return baseUrl;
 };
 
-const formatDate = (date): string => {
+const formatDate = (date: Date): string => {
   return moment(date).format("MMM. DD, YYYY");
 };
 

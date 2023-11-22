@@ -2,8 +2,10 @@ import "server-only";
 
 import gql from "graphql-tag";
 
+import { Tab } from "src/app/work/types";
 import BaseLayout from "src/layouts/base";
-import WorkItemList from "src/app/work/components/WorkItemList";
+import WorkItemList, { WorkItemBuckets } from "src/app/work/components/WorkItemList";
+import { WorkItemProps } from "src/app/work/components/WorkItem";
 import client from "src/apollo";
 import { awsUrl } from "src/util";
 
@@ -12,53 +14,63 @@ export default async function Work() {
   return (
     <BaseLayout>
       <div className="mr-auto">
-        <WorkItemList workItems={ workItems } />
+        <WorkItemList
+          initialTab={ Tab.Experience }
+          workItems={ workItems }
+        />
       </div>
     </BaseLayout>
   );
 }
 
-function parseWorks(rawWorks: object[]) {
-  const separateIntoYears = (array) => {
+function parseWorks(rawWorks: WorkItemDB[]) {
+  const separateIntoYears = (array: WorkItemProps[]): WorkItemBuckets => {
     const yearMap = array.reduce((map, obj) => {
       let year = "NOW";
       if (!!obj.year_end) {
         // If it's a finished project, don't add it to the "NOW" section.
-        year = obj.year_begin;
+        year = obj.year_begin.toString();
       }
       if (!map.has(year)) {
         map.set(year, []);
       }
-      map.get(year).push(obj);
+      map.get(year)?.push(obj);
       return map;
-    }, new Map());
-    const sortByPriority = (a, b) => b.priority - a.priority;
-    return Array.from(yearMap, ([k, v]) => [k, v.sort(sortByPriority)]).sort().reverse();
+    }, new Map<string, WorkItemProps[]>());
+
+    const sortByPriority = (a: WorkItemProps, b: WorkItemProps) => b.priority - a.priority;
+    return Array.from(yearMap, ([k, v]: [string, WorkItemProps[]]) => [k, v.sort(sortByPriority)]).sort().reverse() as WorkItemBuckets;
   };
 
   let experience = [];
   let projects = [];
   for (const work of rawWorks) {
-    let workItem = {};
-    workItem.tags = work.tags;
-    workItem.title = work.title;
-    workItem.desc = work.desc;
+    let logoSrc: string | undefined = undefined;
+    let siteHref: string | undefined = undefined;
     if (!!work.logo) {
-      workItem.logoSrc = awsUrl(`logos/${work.logo}.png`);
+      logoSrc = awsUrl(`logos/${work.logo}.png`);
     } else if (!!work.github) {
-      workItem.logoSrc = "/icons/github.svg";
-      workItem.siteHref = `https://www.github.com/${work.github}`;
+      logoSrc = "/icons/github.svg";
+      siteHref = `https://www.github.com/${work.github}`;
     }
     if (!!work.site) {
       if (!!!work.logo) {
-        workItem.logoSrc = "/icons/url.svg";
+        logoSrc = "/icons/url.svg";
       }
-      workItem.siteHref = work.site;
+      siteHref = work.site;
     }
-    workItem.year_begin = work.interval.year_begin;
-    workItem.year_end = work.interval.year_end;
-    workItem.priority = work.priority || 0;
-    workItem.linkedArticle = work.linkedArticle;
+
+    let workItem: WorkItemProps = {
+      tags: work.tags,
+      title: work.title,
+      desc: work.desc,
+      logoSrc: logoSrc,
+      siteHref: siteHref,
+      year_begin: work.interval.year_begin,
+      year_end: work.interval.year_end,
+      priority: work.priority || 0,
+      linkedArticle: work.linkedArticle,
+    };
 
     if (work.isExperience) {
       experience.push(workItem);
@@ -71,6 +83,24 @@ function parseWorks(rawWorks: object[]) {
     projects: separateIntoYears(projects)
   };
 }
+
+type WorkItemDB = {
+  title: string
+  logo: string | undefined
+  github: string | undefined
+  site: string | undefined
+  desc: string
+  tags: string[]
+  isExperience: boolean | undefined
+  priority: number | undefined
+  linkedArticle: string | undefined
+  interval: {
+    year_begin: number
+    year_end: number | undefined
+    month_begin: number
+    month_end: number | undefined
+  }
+};
 
 async function getData() {
   const WORK_QUERY = gql`

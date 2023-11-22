@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
+    "@types/react-syntax-highlighter": "^15.5.10",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "moment": "^2.29.4",

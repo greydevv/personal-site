@@ -34,7 +34,7 @@ export default function FeaturedBlogItem(props: BlogItemProps) {
             <Image
               src={ awsUrl(`blogs/${props.slug}.png`) }
               fill
-              alt={ props.thumbnailAlt }
+              alt={ props.thumbnailAlt || "" }
             />
           </div>
         </BoxGraphic>

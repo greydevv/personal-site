@@ -2,10 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { Children } from "src/types";
 import { makeCls } from "src/util";
 
 interface NavbarProps {
-  readonly children: NavItem[]
+  readonly children: Children
 }
 
 export default function Navbar(props: NavbarProps) {
@@ -19,7 +20,7 @@ export default function Navbar(props: NavbarProps) {
 interface NavbarItemProps {
   readonly labelText: string
   readonly href: string
-  readonly graphic: ReactElement
+  readonly graphic: JSX.Element
 }
 
 export function NavItem(props: NavbarItemProps) {

@@ -7,19 +7,15 @@ import { notFound } from "next/navigation";
 import gql from "graphql-tag";
 
 import BaseLayout from "src/layouts/base";
+import { PageProps } from "src/types";
 import BlogTags from "src/app/blog/components/BlogTags";
 import BlogBody from "src/app/blog/[slug]/components/BlogBody";
 import client from "src/apollo";
 import { formatDate } from "src/util";
 
-interface BlogPostProps {
-  readonly params: object
-  readonly searchParams: object
-}
-
-export default async function BlogPost(serverProps: BlogPostProps) {
-  const props = await getData(serverProps.params.slug);
-  if (!props) {
+export default async function BlogPost(props: PageProps) {
+  const blog: BlogPost | null = await getData(props.params.slug);
+  if (!blog) {
     return notFound();
   }
 
@@ -37,17 +33,17 @@ export default async function BlogPost(serverProps: BlogPostProps) {
           </Link>
           <div className="mb-4 mt-4">
             <h1 className="text-4xl sm:text-5xl font-semibold">
-              { props.title }
+              { blog.title }
             </h1>
             <p className="attribute text-red">
-              { formatDate(props.date) }
+              { formatDate(blog.date) }
             </p>
           </div>
-          <BlogTags tags={ props.tags } />
+          <BlogTags tags={ blog.tags } />
         </div>
       </div>
       <div className="max-w-[700px] mx-auto px-4">
-        <BlogBody rawMarkdown={ props.body.replace("\\n", "  \n") }/>
+        <BlogBody rawMarkdown={ blog.body.replace("\\n", "  \n") }/>
         <div className="relative h-16 sm:h-20 aspect-[20/9] mx-auto mt-10 sm:mt-20">
           <Image
             src="/signature.svg"
@@ -60,7 +56,14 @@ export default async function BlogPost(serverProps: BlogPostProps) {
   );
 }
 
-async function getData(slug: string): BlogPostProps {
+interface BlogPost {
+  readonly title: string
+  readonly body: string
+  readonly date: Date
+  readonly tags: string[]
+}
+
+async function getData(slug: string): Promise<BlogPost | null> {
   const BLOG_POST_QUERY = gql`
     query ($slug: String!, $public: Boolean!)  {
       blog (query: { slug: $slug, public: $public } ) {
@@ -85,7 +88,7 @@ async function getData(slug: string): BlogPostProps {
     throw error;
   }
 
-  if (!data.blog) {
+  if (!data.blog || !data.blog.public) {
     return null;
   }
 

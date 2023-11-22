@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 
 import BaseLayout from "src/layouts/base";
 import BlogList from "src/app/blog/components/BlogList";
+import { BlogItemProps } from "src/app/blog/components/BlogItem";
 import client from "src/apollo";
 import { awsUrl } from "src/util";
 
@@ -43,8 +44,10 @@ async function getData() {
     throw error;
   }
   
-  const sortByFeatured = (a, b) => {
-    const dateComparison = a.date - b.date;
+  const sortByFeatured = (a: BlogItemProps, b: BlogItemProps): number => {
+    // Need to instantiate date again to make compiler happy.
+    // See: https://stackoverflow.com/a/52931503/12326283
+    const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
 
     if (dateComparison === 0) {
       if (a.featured && !b.featured) {
@@ -52,9 +55,8 @@ async function getData() {
       } else if (!a.featured && b.featured) {
         return 1;
       }
-    } else {
-      return dateComparison;
     }
+    return dateComparison;
   };
   return [...data.blogs].sort(sortByFeatured);
 }

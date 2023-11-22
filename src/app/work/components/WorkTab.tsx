@@ -3,12 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 
+import { Tab } from "src/app/work/types";
 import { makeCls } from "src/util";
-
-enum Tab {
-  Experience = "EXPERIENCE",
-  Projects = "PROJECTS",
-}
 
 interface WorkTabProps {
   readonly defaultTab: Tab

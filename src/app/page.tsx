@@ -3,9 +3,10 @@ import Link from "next/link";
 
 import BaseLayout from "src/layouts/base";
 import BoxGraphic from "src/components/BoxGraphic";
+import { PageProps } from "src/types";
 import { awsUrl } from "src/util";
 
-export default function Home() {
+export default function Home(props: PageProps) {
   return (
     <BaseLayout>
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8 sm:mb-16">

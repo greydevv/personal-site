@@ -4,14 +4,14 @@ import BlogTags from "src/app/blog/components/BlogTags";
 import { formatDate } from "src/util";
 
 interface BlogItemProps {
-  title: string
-  date: Date
-  slug: string
-  hook: string
-  tags: string[]
-  featured: boolean
-  thumbnailSrc?: string
-  thumbnailAlt?: string
+  readonly title: string
+  readonly date: Date
+  readonly slug: string
+  readonly hook: string
+  readonly tags: string[]
+  readonly featured: boolean
+  readonly thumbnailSrc?: string
+  readonly thumbnailAlt?: string
 }
 
 export default function BlogItem(props: BlogItemProps) {
@@ -41,4 +41,4 @@ export default function BlogItem(props: BlogItemProps) {
   );
 }
 
-export { BlogItemProps };
+export type { BlogItemProps };

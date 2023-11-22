@@ -5,14 +5,15 @@ import { useState, useEffect } from "react";
 import WorkTab, { Tab } from "src/app/work/components/WorkTab";
 import WorkItem, { WorkItemProps } from  "src/app/work/components/WorkItem";
 
-type WorkItemBuckets = [string | number, WorkItem[]][];
+export type WorkItemBuckets = [string | number, WorkItemProps[]][];
 
 interface WorkItemListProps {
   readonly workItems: {experience: WorkItemBuckets, projects: WorkItemBuckets}
+  readonly initialTab: Tab
 }
  
 export default function WorkItemList(props: WorkItemListProps) {
-  const [items, setItems] = useState<WorkItemListProps.workItems>(props.workItems.experience);
+  const [items, setItems] = useState<WorkItemBuckets>(props.workItems.experience);
   const [tab, setTab] = useState<Tab>(props.initialTab);
 
   useEffect(() => {

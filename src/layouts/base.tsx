@@ -1,14 +1,14 @@
 import Navbar, { NavItem } from "src/components/navigation/Navbar";
+import { Children } from "src/types";
 import { makeCls } from "src/util";
 
 interface BaseLayoutProps {
-  readonly hideNavbar: boolean
-  readonly children: ReactNode[]
+  readonly hideNavbar?: boolean
+  readonly children: Children
 }
 
 export default function BaseLayout(props: BaseLayoutProps) {
   const showNavbar = !!!props.hideNavbar;
-
   const graphics = {
     about: (
       <svg

@@ -1,24 +1,25 @@
+import { Children } from "src/types";
 import { makeCls } from "src/util";
 
 interface BoxGraphicProps {
-  readonly leftAlign: boolean
   readonly className: string
-  readonly children: ReactNode[]
-  readonly extraBorderCls: boolean
-  readonly extraBackdropCls: boolean
+  readonly left?: boolean
+  readonly children: Children
+  readonly extraBorderCls?: string
+  readonly extraBackdropCls?: string
 }
 
 export default function BoxGraphic(props: BoxGraphicProps) {
   const borderCls = makeCls(
     "z-[-1] absolute w-full h-full border border-red top-5 pointer-events-none",
     [props.left, "right-5", "left-5"],
-    [!!props.extraBorderCls, props.extraBorderCls]
+    [!!props.extraBorderCls, props.extraBorderCls || ""]
   );
 
   const backdropCls = makeCls(
     "z-[-2] absolute w-full h-full bg-red-10 top-8 pointer-events-none",
     [props.left, "right-8", "left-8"],
-    [!!props.extraBackdropCls, props.extraBackdropCls]
+    [!!props.extraBackdropCls, props.extraBackdropCls || ""]
   );
 
   return (

@@ -5,7 +5,7 @@ import { makeCls, awsUrl } from "src/util";
 
 interface WorkItemProps {
   readonly title: string
-  readonly description: string
+  readonly desc: string
   readonly tags: string[]
   readonly siteHref?: string
   readonly logoSrc?: string
@@ -80,4 +80,4 @@ function WorkItemLink(props: WorkItemLinkProps) {
   }
 }
 
-export { WorkItemProps };
+export type { WorkItemProps };

@@ -7,7 +7,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 
-import renderer from "src/app/blog/[slug]/rendering/renderer";
+import renderer from "../rendering/renderer";
 
 interface BlogBodyProps {
   readonly rawMarkdown: string
@@ -21,12 +21,16 @@ export default function BlogBody(props: BlogBodyProps) {
   );
 }
 
-const Markdown = ({ children }) => (
+interface MarkdownProps {
+  readonly children: string
+}
+
+const Markdown = (props: MarkdownProps) => (
   <ReactMarkdown
     remarkPlugins={ [remarkMath] }
     rehypePlugins={ [rehypeKatex] }
     components={ renderer }
   >
-    { children }
+    { props.children }
   </ReactMarkdown>
 );
