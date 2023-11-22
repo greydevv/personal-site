@@ -47,16 +47,15 @@ async function getData() {
   const sortByFeatured = (a: BlogItemProps, b: BlogItemProps): number => {
     // Need to instantiate date again to make compiler happy.
     // See: https://stackoverflow.com/a/52931503/12326283
-    const dateComparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+    const dateComparison = new Date(b.date).getTime() - new Date(a.date).getTime();
 
-    if (dateComparison === 0) {
-      if (a.featured && !b.featured) {
-        return -1;
-      } else if (!a.featured && b.featured) {
-        return 1;
-      }
+    if (a.featured && !b.featured) {
+      return -1;
+    } else if (!a.featured && b.featured) {
+      return 1;
+    } else {
+      return dateComparison;
     }
-    return dateComparison;
   };
   return [...data.blogs].sort(sortByFeatured);
 }
