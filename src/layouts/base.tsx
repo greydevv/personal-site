@@ -9,7 +9,7 @@ interface BaseLayoutProps {
 
 export default function BaseLayout(props: BaseLayoutProps) {
   const showNavbar = !!!props.hideNavbar;
-  const graphicCls = ""
+  const graphicCls = "";
   const graphics = {
     about: (
       <svg

@@ -23,13 +23,13 @@ export default function ArtItemList(props: ArtItemListProps) {
     return (
       <div className="grid auto-rows-auto grid-cols-1 mb-auto gap-y-8">
         { props.items.map((item, i) =>
-          <div className={ `row-start-${i+1} row-end-${i+2} flex justify-center`}>
-            <ArtItem key={ i } { ...item } />
+          <div key={ i } className={ `row-start-${i+1} row-end-${i+2} flex justify-center`}>
+            <ArtItem { ...item } />
           </div>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="mx-auto grid grid-cols-1 auto-rows-auto sm:grid-cols-2 sm:grid-rows-1 gap-y-4 sm:gap-x-16">

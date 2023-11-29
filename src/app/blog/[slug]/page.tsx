@@ -168,5 +168,5 @@ function getBlogBody() {
     "![Four temperature gauges depicting an analogy of gradient descent.](what-is-a-perceptron/gradient_descent_analogy.png)",
     "It started off too hot, so you try turning it down. It's more comfortable than before, but it's still too hot. You try to take a bigger step, but overshot - it's too cold. Tuning the gauge once more, you finally land on the most comfortable temperature. This is an oversimplified example of how weights and biases are tuned in gradient descent." ,
     "### Wrapping Up",
-  ]
+  ];
 }
