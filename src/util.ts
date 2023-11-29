@@ -15,8 +15,10 @@ const makeCls = (staticCls: string, ...dynamicCls: [boolean | undefined | null, 
 const awsUrl = (path: string): string => {
   const baseUrl = `https://${process.env.NEXT_PUBLIC_S3_ORIGIN}`;
   if (!!path) {
-    // Uncomment this line to force Next JS to refetch the images.
-    // return `${baseUrl}/${path}?${new Date().getTime()}`;
+    if (process.env.NODE_ENV === "development") {
+      // Trick to get around Next.js image cache (not used in production).
+      return `${baseUrl}/${path}?${new Date().getTime()}`;
+    }
     return `${baseUrl}/${path}`;
   }
   return baseUrl;
