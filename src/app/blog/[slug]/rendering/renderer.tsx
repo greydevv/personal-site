@@ -7,6 +7,7 @@ import { awsUrl } from "src/util";
 
 declare namespace IntrinsicProps {
   type UnorderedListProps = JSX.IntrinsicElements["ul"] & ExtraProps;
+  type OrderedListProps = JSX.IntrinsicElements["ol"] & ExtraProps;
   type HeadingThreeProps = JSX.IntrinsicElements["h3"] & ExtraProps;
   type CodeProps = JSX.IntrinsicElements["code"] & ExtraProps;
   type ImageProps = JSX.IntrinsicElements["img"] & ExtraProps;
@@ -15,6 +16,9 @@ declare namespace IntrinsicProps {
 }
 
 const renderer = {
+  ol(props: IntrinsicProps.OrderedListProps) {
+    return (<ol className="list-decimal ml-4">{ props.children }</ol>);
+  },
   ul(props: IntrinsicProps.UnorderedListProps) {
     return (<ul className="list-disc ml-4">{ props.children }</ul>);
   },
