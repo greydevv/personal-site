@@ -39,7 +39,7 @@ export default function WorkItemList(props: WorkItemListProps) {
                   { year }
                 </h2>
               </div>
-              <div className="flex flex-col gap-y-6 sm:gap-y-8">
+              <div className="flex flex-col gap-y-4 sm:gap-y-6">
                 { workItems.map((item, j) => <WorkItem key={ j } { ...item } />) }
               </div>
             </div>

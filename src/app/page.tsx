@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import BaseLayout from "src/layouts/base";
 import BoxGraphic from "src/components/BoxGraphic";
+import ContactLinks from "src/components/ContactLinks";
 import { PageProps } from "src/types";
 import { awsUrl } from "src/util";
 
@@ -20,24 +20,7 @@ export default function Home(props: PageProps) {
             computer science at Penn State University. Outside of CS I spend my
             time playing soccer, cheffing up new recipes, and creating art.
           </p>
-          <div className="flex gap-x-2">
-            <ContactIcon
-              name="linkedin"
-              href="https://www.linkedin.com/in/greyson-murray/"
-            />
-            <ContactIcon
-              name="github"
-              href="https://github.com/greydevv"
-            />
-            <ContactIcon
-              name="stackoverflow"
-              href="https://stackoverflow.com/users/12326283/gmdev"
-            />
-            <ContactIcon
-              name="mail"
-              href="mailto:greyson.murray@gmail.com"
-            />
-          </div>
+          <ContactLinks />
         </div>
         <BoxGraphic className="aspect-[4/5] mb-12 sm:mb-0 row-start-1 sm:col-start-2">
           <Image
@@ -92,20 +75,3 @@ export default function Home(props: PageProps) {
   );
 }
 
-interface ContactIconProps {
-  readonly name: string
-  readonly href: string
-}
-
-function ContactIcon(props: ContactIconProps) {
-  return (
-    <Link href={ props.href } target="_blank">
-      <Image
-        src={ `/icons/${props.name}.svg` }
-        alt=""
-        height="24"
-        width="24"
-      />
-    </Link>
-  );
-}
