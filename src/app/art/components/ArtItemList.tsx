@@ -9,7 +9,6 @@ export default function ArtItemList(props: ArtItemListProps) {
   const firstHalfItems: ArtItemProps[] = [];
   const secondHalfItems: ArtItemProps[] = [];
   const halfIdx = Math.ceil(props.items.length / 2);
-  console.log(halfIdx);
   for (const [idx, item] of props.items.entries()) {
     if (idx < halfIdx) {
       firstHalfItems.push(item);

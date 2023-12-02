@@ -18,10 +18,10 @@ export default async function Art(props: PageProps) {
           <div className="flex flex-col gap-y-4 max-w-xl">
             <p>
               This page is dedicated to some of the art pieces I’ve created
-              throughout the years. My favorite mediums are pencil/pen & ink on
-              paper and acrylic on canvas. Additionally, I’ll dabble in graphic
-              design here and there. As I gather some more pictures of previous
-              works, I’ll throw em’ in this page.
+              throughout the years. My primary mediums are pencil/pen & ink on
+              paper and acrylic on canvas. I’ll also find myself working in
+              graphic design here and there. As I gather some more pictures of
+              previous works, I’ll throw em’ into this page.
             </p>
             <p>
               Please enjoy :)
