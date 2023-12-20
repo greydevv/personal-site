@@ -46,6 +46,7 @@ async function getData() {
           hours
           medium
         }
+        description
       }
     }
   `;
