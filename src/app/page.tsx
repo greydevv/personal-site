@@ -12,13 +12,14 @@ export default function Home(props: PageProps) {
       <div className="grid grid-cols-1 sm:grid-cols-[1fr_300px] grid-rows-auto sm:grid-rows-1 gap-y-0 gap-x-0 sm:gap-x-8 mb-8 sm:mb-16">
         <div className="row-start-2 sm:row-start-1 col-start-1">
           <h1 className="mb-4 max-w-xl">
-            I’m Greyson, an artist and computer science student. 
+            I’m Greyson, an artist and software engineer.
           </h1>
           <p className="mb-4 max-w-sm">
             Hey! I was born in Baltimore, Maryland, and raised in Southern
-            York, Pennsylvania. I’m currently a senior pursuing a degree in
-            computer science at Penn State University. Outside of CS I spend my
-            time playing soccer, cheffing up new recipes, and creating art.
+            York, Pennsylvania. I graduated from Penn State University with a
+            bachelor's degree in Computer Sciences and am currently working at
+            DraftKings as an iOS engineer. Outside of CS I spend my time playing
+            soccer, guitar, cheffing up new recipes, and creating art.
           </p>
           <ContactLinks />
         </div>
