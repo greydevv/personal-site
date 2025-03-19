@@ -17,9 +17,9 @@ export default function Home(props: PageProps) {
           <p className="mb-4 max-w-sm">
             Hey! I was born in Baltimore, Maryland, and raised in Southern
             York, Pennsylvania. I graduated from Penn State University with a
-            bachelor’s degree in Computer Sciences and am currently working at
-            DraftKings as an iOS engineer. Outside of CS I spend my time playing
-            soccer, guitar, cheffing up new recipes, and creating art.
+            bachelor’s degree in computer science and am currently working at
+            DraftKings as a software engineer. Outside of work I spend my time
+            playing soccer, guitar, cheffing up new recipes, and creating art.
           </p>
           <ContactLinks />
         </div>
