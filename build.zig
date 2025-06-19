@@ -4,7 +4,7 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // Executable: parse .env file
+    // Module: dotenv
     const dotenv_mod = b.createModule(.{
         .root_source_file = b.path("deps/dotenv.zig"),
         .target = target,
