@@ -2,8 +2,12 @@ const std = @import("std");
 const models = @import("models");
 const Layout = @import("../../layout/layout.zig");
 
-pub fn render(allocator: std.mem.Allocator, art: []const models.Art) ![]const u8 {
-    const art_list_html = try artList(allocator, art);
+pub fn render(
+    allocator: std.mem.Allocator,
+    comptime cdn_prefix: []const u8,
+    art: []const models.Art
+) ![]const u8 {
+    const art_list_html = try artList(allocator, cdn_prefix, art);
     defer allocator.free(art_list_html);
 
     return Layout.render(
@@ -16,7 +20,11 @@ pub fn render(allocator: std.mem.Allocator, art: []const models.Art) ![]const u8
     );
 }
 
-fn artList(allocator: std.mem.Allocator, art: []const models.Art) ![]const u8 {
+fn artList(
+    allocator: std.mem.Allocator,
+    comptime cdn_prefix: []const u8,
+    art: []const models.Art
+) ![]const u8 {
     const html_fmt = 
         \\ <div class="mx-auto grid grid-cols-2 gap-x-6">
         \\   <div class="col-start-1 col-end-2 flex flex-col gap-y-6">
@@ -39,7 +47,7 @@ fn artList(allocator: std.mem.Allocator, art: []const models.Art) ![]const u8 {
             allocator,
             \\ <div class="flex flex-col">
             \\   <img 
-            \\     src="https://s3.us-east-1.amazonaws.com/cdn.greysonmurray.com/art/{s}"
+            \\     src="{s}{s}"
             \\     class="mb-2"
             \\   >
             \\   <h4>{s}</h4>
@@ -48,6 +56,7 @@ fn artList(allocator: std.mem.Allocator, art: []const models.Art) ![]const u8 {
             \\   </p>
             \\ </div>
             , .{
+                cdn_prefix,
                 art_item.image_slug,
                 art_item.title,
                 art_item.medium

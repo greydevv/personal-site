@@ -227,7 +227,7 @@ fn getArt(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     }
 
     res.status = 200;
-    res.body = try templates.art.render(res.arena, art.items);
+    res.body = try templates.art.render(res.arena, dotenv.CDN_PREFIX, art.items);
 }
 
 fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
