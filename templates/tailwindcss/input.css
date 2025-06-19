@@ -15,6 +15,7 @@
   --color-primary: var(--color-stone-900);
   --color-subdued: var(--color-stone-500);
   --color-background: var(--color-stone-50);
+  --color-surface: var(--color-stone-200);
 }
 
 @layer base {
@@ -54,9 +55,17 @@
 }
 
 .dmk_document > .dmk_callout_hint {
-  @apply p-2 rounded bg-stone-100;
+  @apply p-2 rounded bg-surface;
 }
 
 .dmk_document pre {
-  @apply p-2 rounded bg-stone-100 font-mono;
+  @apply p-2 rounded bg-surface font-mono;
+}
+
+.dmk_inline_code {
+  @apply px-2 py-[2px] rounded bg-surface font-mono text-center font-medium;
+}
+
+.dmk_line_break {
+  @apply h-4 w-full;
 }

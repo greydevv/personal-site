@@ -249,7 +249,7 @@ fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
         };
 
         res.status = 200;
-        res.body = try templates.post.render(res.arena, post);
+        res.body = try templates.post.render(res.arena, &post);
     } else {
         res.status = 404;
         res.body = templates.fourOhFour;

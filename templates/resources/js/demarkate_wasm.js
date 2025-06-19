@@ -1,9 +1,13 @@
 var getMemoryView = function() {
-  throw "editor not initialized"
+  throw "WASM module not initialized"
+}
+
+var exportClicked = function() {
+  throw "WASM module not initialized"
 }
 
 var togglePreview = function() {
-  throw "editor not initialized"
+  throw "WASM module not initialized"
 }
 
 const importObject = {
@@ -117,6 +121,10 @@ WebAssembly.instantiateStreaming(fetch("/wasm/demarkate.wasm"), importObject)
           editor.style.display = "block";
           preview.style.display = "none";
         }
+      }
+
+      exportClicked = function() {
+        console.log(JSON.stringify(editor.value));
       }
 
       window.addEventListener("load", (event) => {

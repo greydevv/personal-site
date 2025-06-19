@@ -10,12 +10,20 @@
         <h4 class="text-stone-400">
           Demarkate Editor :)
         </h4>
-        <button
-          class="row-start-1 bg-stone-200 rounded font-bold p-2"
-          onClick="togglePreview();"
-        >
-          Toggle
-        </button>
+        <div class="flex flex-row gap-x-2">
+          <button
+            class="row-start-1 bg-stone-200 rounded font-bold p-2"
+            onClick="exportClicked();"
+          >
+            Export Source
+          </button>
+          <button
+            class="row-start-1 bg-stone-200 rounded font-bold p-2"
+            onClick="togglePreview();"
+          >
+            Toggle Preview
+          </button>
+        </div>
       </div>
 
       <!-- editor -->

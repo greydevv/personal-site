@@ -4,13 +4,6 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    // Module: dotenv
-    const dotenv_mod = b.createModule(.{
-        .root_source_file = b.path("deps/dotenv.zig"),
-        .target = target,
-        .optimize = optimize
-    });
-
     // Module: exe
     const exe_mod = b.createModule(.{
         .root_source_file = b.path("src/main.zig"),
@@ -36,10 +29,30 @@ pub fn build(b: *std.Build) void {
 
     // Imports
     {
-        exe_mod.addImport("dotenv", dotenv_mod);
         exe_mod.addImport("templates", templates_mod);
         exe_mod.addImport("models", models_mod);
         templates_mod.addImport("models", models_mod);
+    }
+
+    // Dependency: dotenv
+    {
+        const dotenv = b.createModule(.{
+            .root_source_file = b.path("deps/dotenv.zig"),
+            .target = target,
+            .optimize = optimize
+        });
+
+        exe_mod.addImport("dotenv", dotenv);
+    }
+
+    // Dependency: demarkate
+    {
+        const demarkate = b.dependency("demarkate", .{
+            .target = target,
+            .optimize = optimize,
+        });
+
+        templates_mod.addImport("demarkate", demarkate.module("demarkate"));
     }
 
     // Dependency: httpz
@@ -145,6 +158,7 @@ fn tailwindCssStep(b: *std.Build, install_path: []const u8) *std.Build.Step {
         "tailwindcss",
         "-i", "templates/tailwindcss/input.css", // input file
         "-o", install_path, // output file
+        "--minify"
     });
 
     return &generate_css_cmd.step;
