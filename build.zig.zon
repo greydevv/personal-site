@@ -1,0 +1,24 @@
+.{
+    .name = .personal_site,
+    .version = "0.0.0",
+    .fingerprint = 0x58490ed9dd79152a,
+    .dependencies = .{
+        .httpz = .{
+            .path = "./deps/http.zig",
+        },
+        .pg = .{
+            .path = "./deps/pg.zig",
+        },
+        .demarkate = .{
+            .path = "../demarkate"
+        },
+        .dotenz = .{
+            .path = "../dotenz"
+        }
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
