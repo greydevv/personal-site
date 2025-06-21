@@ -63,7 +63,11 @@
 }
 
 .dmk_inline_code {
-  @apply px-2 py-[2px] rounded bg-surface font-mono text-center font-medium;
+  @apply px-2 py-[2px] rounded bg-surface font-mono text-center;
+}
+
+code {
+  @apply text-sm;
 }
 
 .dmk_line_break {
