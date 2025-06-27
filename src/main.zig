@@ -226,7 +226,7 @@ fn numericToValue(comptime T: type, numeric: pg.Numeric) T {
 
     switch (builtin.cpu.arch.endian()) {
         .big => return @truncate(value),
-        .little => return @truncate(@byteSwap(value))
+        .little => return @truncate(@byteSwap(value)),
     }
 }
 
