@@ -79,6 +79,9 @@ pub fn main() !void {
 
     var router = try server.router(.{});
 
+    // AWS health check
+    router.get("/healthcheck", performHealthCheck, .{});
+
     // serving public files
     router.get("/js/htmx.min.js", getHtmxScript, .{});
     router.get("/js/navbar.js", getNavbarScript, .{});
@@ -116,6 +119,13 @@ fn sendFile(res: *httpz.Response, path: []const u8) !void {
 
     res.status = 200;
     res.body = body;
+}
+
+fn performHealthCheck(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
+    std.log.info("handling /healthcheck", .{});
+
+    res.status = 200;
+    res.body = "OK";
 }
 
 fn getHtmxScript(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
