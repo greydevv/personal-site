@@ -104,7 +104,7 @@ pub fn main() !void {
     try server.listen();
 }
 
-fn sendFile(res: *httpz.Response, path: []const u8) !void {
+fn sendFile(res: *httpz.Response, path: []const u8, content_type: httpz.ContentType) !void {
     const file = std.fs.cwd().openFile(path, .{}) catch |err| {
         std.log.err("openFile({s}): {s}\n", .{ path, @errorName(err) });
         return err;
@@ -119,6 +119,7 @@ fn sendFile(res: *httpz.Response, path: []const u8) !void {
 
     res.status = 200;
     res.body = body;
+    res.content_type = content_type;
 }
 
 fn performHealthCheck(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
@@ -126,24 +127,28 @@ fn performHealthCheck(_: *Handler, _: *httpz.Request, res: *httpz.Response) !voi
 
     res.status = 200;
     res.body = "OK";
+    res.content_type = .HTML;
 }
 
 fn getHtmxScript(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     res.status = 200;
     res.body = templates.htmx_script;
+    res.content_type = .JS;
 }
 
 fn getNavbarScript(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     res.status = 200;
     res.body = templates.navbar_script;
+    res.content_type = .JS;
 }
 
 fn getCssStylesheet(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, build_options.css_install_path);
+    try sendFile(res, build_options.css_install_path, .CSS);
 }
 
 fn getChromeDevToolsJson(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     res.status = 204;
+    res.content_type = .JSON;
 }
 
 fn getHome(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
@@ -164,6 +169,7 @@ fn getHome(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
 
     res.status = 200;
     res.body = try templates.home.render(res.arena, posts.items);
+    res.content_type = .HTML;
 }
 
 
@@ -212,6 +218,7 @@ fn getWork(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
 
     res.status = 200;
     res.body = try templates.work.render(res.arena, work.items);
+    res.content_type = .HTML;
 }
 
 fn numericToValue(comptime T: type, numeric: pg.Numeric) T {
@@ -241,6 +248,7 @@ fn getArt(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
 
     res.status = 200;
     res.body = try templates.art.render(res.arena, dotenv.CDN_PREFIX, art.items);
+    res.content_type = .HTML;
 }
 
 fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
@@ -267,17 +275,18 @@ fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
         res.status = 404;
         res.body = templates.fourOhFour;
     }
+
+    res.content_type = .HTML;
 }
 
 fn getDemarkate(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "templates/resources/html/demarkate_editor.html");
+    try sendFile(res, "templates/resources/html/demarkate_editor.html", .HTML);
 }
 
 fn getDemarkateWasmJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "templates/resources/js/demarkate_wasm.js");
+    try sendFile(res, "templates/resources/js/demarkate_wasm.js", .JS);
 }
 
 fn getDemarkateWasm(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    res.content_type = .WASM;
-    try sendFile(res, build_options.wasm_install_path);
+    try sendFile(res, build_options.wasm_install_path, .WASM);
 }
