@@ -99,7 +99,7 @@ pub fn main() !void {
     // serving .well-known files
     router.get("/.well-known/appspecific/com.chrome.devtools.json", getChromeDevToolsJson, .{});
 
-    std.log.info("Listening http://localhost:{d}/\n", .{ dotenv.HTTP_SERVER_PORT });
+    std.log.info("Listening http://{s}:{d}/\n", .{ dotenv.HTTP_SERVER_ADDRESS, dotenv.HTTP_SERVER_PORT });
 
     try server.listen();
 }
