@@ -4,17 +4,16 @@
     .fingerprint = 0x58490ed9dd79152a,
     .dependencies = .{
         .httpz = .{
-            .path = "./deps/http.zig",
+            .url = "git+https://github.com/karlseguin/http.zig?ref=dev#b1896f4b0bd30deb0351039b1ba470c9041f4117",
+            .hash = "httpz-0.0.0-PNVzrE-8BgCUEVpFtYaUOFrWMqXHBu95eyIYRkXbyriy",
         },
         .pg = .{
-            .path = "./deps/pg.zig",
+            .path = "../pg.zig"
         },
         .demarkate = .{
-            .path = "../demarkate"
+            .url = "https://github.com/greydevv/demarkate/archive/refs/tags/0.0.0-alpha.0.tar.gz",
+            .hash = "demarkate-0.0.0-alpha.0-K442QcPJAACdKC5tecRKbC1v8TaYJQPU_V6-1HO8XIg6",
         },
-        .dotenz = .{
-            .path = "../dotenz"
-        }
     },
     .paths = .{
         "build.zig",
