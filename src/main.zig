@@ -8,6 +8,8 @@ const dotenv = @import("dotenv");
 const models = @import("models");
 const templates = @import("templates");
 
+pub const pg_stderr_tls = true;
+
 const Handler = struct {
     pool: *pg.Pool,
 
@@ -46,6 +48,7 @@ const Handler = struct {
 
     pub fn uncaughtError(self: *Handler, req: *httpz.Request, res: *httpz.Response, err: anyerror) void {
         std.log.err("error at {s}: {}", .{ req.url.path, err });
+        pg.printSSLError();
         for (self.pool._conns) |conn| {
             if (conn.err) |e| {
                 std.log.err("  (PG): {s}", .{ e.message });
