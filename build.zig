@@ -84,6 +84,8 @@ pub fn build(b: *std.Build) void {
             .root_module = exe_mod,
         });
 
+        exe.linkLibC();
+
         b.installArtifact(exe);
 
         const run_cmd = b.addRunArtifact(exe);
@@ -132,14 +134,14 @@ pub fn build(b: *std.Build) void {
 
 /// Create the step to emit a .wasm file from demarkate.
 fn demarkateWasmStep(b: *std.Build, install_path: []const u8) *std.Build.Step {
-    const demarkate = b .dependency("demarkate", .{
+    const demarkate = b.dependency("demarkate", .{
         .wasm = true,
         .optimize = std.builtin.OptimizeMode.ReleaseSmall,
     });
 
     const install_wasm = b.addInstallArtifact(
         demarkate.artifact("demarkate"),
-        .{ .dest_dir = .{ .override = .{ .custom = install_path }}},
+        .{ .dest_dir = .{ .override = .{ .custom = install_path } } },
     );
 
     return &install_wasm.step;
