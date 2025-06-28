@@ -8,11 +8,12 @@
             .hash = "httpz-0.0.0-PNVzrE-8BgCUEVpFtYaUOFrWMqXHBu95eyIYRkXbyriy",
         },
         .pg = .{
-            .path = "../pg.zig"
+            .url = "https://github.com/greydevv/pg.zig/archive/refs/heads/zig-0.15.tar.gz",
+            .hash = "pg-0.0.0-Wp_7gbUCBgDKnG4DdG3eOKe1uKcnQf90G3nM1tTUR8o8",
         },
         .demarkate = .{
-            .url = "https://github.com/greydevv/demarkate/archive/refs/tags/0.0.0-alpha.0.tar.gz",
-            .hash = "demarkate-0.0.0-alpha.0-K442QcPJAACdKC5tecRKbC1v8TaYJQPU_V6-1HO8XIg6",
+            .url = "https://github.com/greydevv/demarkate/archive/refs/tags/0.0.0-alpha.1.tar.gz",
+            .hash = "demarkate-0.0.0-alpha.1-K442QUnQAADtnPrXc0imn9JT86-YxjPCOZe-Qc_CZWxS",
         },
     },
     .paths = .{
