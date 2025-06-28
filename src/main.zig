@@ -70,6 +70,7 @@ pub fn main() !void {
 
     var server = try httpz.Server(*Handler).init(allocator, .{
         .port = dotenv.HTTP_SERVER_PORT,
+        .address = dotenv.HTTP_SERVER_ADDRESS,
         .request = .{
             .max_form_count = 20
         }
