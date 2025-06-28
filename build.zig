@@ -70,6 +70,7 @@ pub fn build(b: *std.Build) void {
         const pg = b.dependency("pg", .{
             .target = target,
             .optimize = optimize,
+            .openssl_lib_name = @as([]const u8, "ssl"),
         });
 
         exe_mod.addImport("pg", pg.module("pg"));

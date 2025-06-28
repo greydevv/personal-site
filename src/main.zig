@@ -16,17 +16,18 @@ const Handler = struct {
     pub fn init(allocator: std.mem.Allocator) !Handler {
         return .{
             .pool = try pg.Pool.init(allocator, .{
-              .size = 5,
-              .connect = .{
-                .port = dotenv.DB_PORT,
-                .host = dotenv.DB_HOST,
-              },
-              .auth = .{
-                .username = dotenv.DB_USERNAME,
-                .database = dotenv.DB_DATABASE,
-                .password = dotenv.DB_PASSWORD,
-                .timeout = 10_000,
-              }
+                .size = 5,
+                .connect = .{
+                    .port = dotenv.DB_PORT,
+                    .host = dotenv.DB_HOST,
+                    .tls = .require
+                },
+                .auth = .{
+                    .username = dotenv.DB_USERNAME,
+                    .database = dotenv.DB_DATABASE,
+                    .password = dotenv.DB_PASSWORD,
+                    .timeout = 10_000,
+                }
             })
         };
     }
