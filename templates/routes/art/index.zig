@@ -1,13 +1,13 @@
 const std = @import("std");
 const models = @import("models");
 const Layout = @import("../../layout/layout.zig");
+const dotenv = @import("dotenv");
 
 pub fn render(
     allocator: std.mem.Allocator,
-    comptime cdn_prefix: []const u8,
     art: []const models.Art
 ) ![]const u8 {
-    const art_list_html = try artList(allocator, cdn_prefix, art);
+    const art_list_html = try artList(allocator, art);
     defer allocator.free(art_list_html);
 
     return Layout.render(
@@ -22,7 +22,6 @@ pub fn render(
 
 fn artList(
     allocator: std.mem.Allocator,
-    comptime cdn_prefix: []const u8,
     art: []const models.Art
 ) ![]const u8 {
     const html_fmt = 
@@ -47,7 +46,7 @@ fn artList(
             allocator,
             \\ <div class="flex flex-col">
             \\   <img 
-            \\     src="{s}{s}"
+            \\     src="{s}/{s}"
             \\     class="mb-2"
             \\   >
             \\   <h4>{s}</h4>
@@ -56,7 +55,7 @@ fn artList(
             \\   </p>
             \\ </div>
             , .{
-                cdn_prefix,
+                dotenv.CDN_PREFIX,
                 art_item.image_slug,
                 art_item.title,
                 art_item.medium

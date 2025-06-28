@@ -43,6 +43,7 @@ pub fn build(b: *std.Build) void {
         });
 
         exe_mod.addImport("dotenv", dotenv);
+        templates_mod.addImport("dotenv", dotenv);
     }
 
     // Dependency: demarkate

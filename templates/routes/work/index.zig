@@ -1,5 +1,6 @@
 const std = @import("std");
 const models = @import("models");
+const dotenv = @import("dotenv");
 const Layout = @import("../../layout/layout.zig");
 
 pub fn render(allocator: std.mem.Allocator, work: []const models.Work) ![]const u8 {
@@ -96,11 +97,21 @@ fn item(
     allocator: std.mem.Allocator,
     work_item: *const models.Work
 ) ![]const u8 {
+    const logo_url = try std.fmt.allocPrint(
+        allocator,
+        "{s}/logos/{s}",
+        .{
+            dotenv.CDN_PREFIX,
+            work_item.icon_slug
+        }
+    );
+    defer allocator.free(logo_url);
+
     return std.fmt.allocPrint(
         allocator,
         @embedFile("item.html"),
         .{
-            work_item.icon_slug,
+            logo_url,
             work_item.title,
             try intervalText(allocator, work_item),
             work_item.description
