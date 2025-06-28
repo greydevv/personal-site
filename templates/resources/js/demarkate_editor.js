@@ -1,6 +1,3 @@
-const MAX_ALLOC_SIZE = 1 << 20;
-console.log(MAX_ALLOC_SIZE);
-
 var getMemoryView = function() {
   throw "WASM module not initialized"
 }
