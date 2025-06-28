@@ -39,7 +39,7 @@ pub fn build(b: *std.Build) void {
         const dotenv = b.createModule(.{
             .root_source_file = b.path("deps/dotenv.zig"),
             .target = target,
-            .optimize = optimize
+            .optimize = optimize,
         });
 
         exe_mod.addImport("dotenv", dotenv);
