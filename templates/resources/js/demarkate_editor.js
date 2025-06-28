@@ -1,13 +1,20 @@
+const MAX_ALLOC_SIZE = 1 << 20;
+console.log(MAX_ALLOC_SIZE);
+
 var getMemoryView = function() {
   throw "WASM module not initialized"
 }
 
-var exportClicked = function() {
+var copySourceClicked = function() {
   throw "WASM module not initialized"
 }
 
-var togglePreview = function() {
-  throw "WASM module not initialized"
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    console.log("Failed to copy text to clipboard");
+  }
 }
 
 const importObject = {
@@ -48,10 +55,15 @@ function Slice(ptr, len) {
 }
 
 function alloc(src) {
-  const memoryView = getMemoryView();
-
   const ptr = 0;
-  const dest = asByteArrayWithOffset(memoryView, ptr);
+
+  const memoryView = getMemoryView();
+  const dest = new Uint8Array(
+    memoryView.buffer,
+    memoryView.byteOffset,
+    Math.min(src.length, memoryView.byteLength)
+  );
+
   const { written: len } = new TextEncoder().encodeInto(src, dest);
 
   return new Slice(ptr, len);
@@ -76,10 +88,6 @@ function sliceFromU64(u64) {
   );
 }
 
-function clickedRender() {
-  throw "WASM module not initialized"
-}
-
 WebAssembly.instantiateStreaming(fetch("/wasm/demarkate.wasm"), importObject)
   .then(
     (obj) => {
@@ -94,6 +102,15 @@ WebAssembly.instantiateStreaming(fetch("/wasm/demarkate.wasm"), importObject)
         return memoryView
       }
 
+      const emptySourceHtml = "<p>...and it will render as you type :)</p>"
+      const editor = document.getElementById("editor");
+      const preview = document.getElementById("preview");
+      preview.innerHTML = emptySourceHtml;
+
+      copySourceClicked = function() {
+        copyToClipboard(editor.value);
+      }
+
       function render() {
         const src = alloc(editor.value);
         const out = sliceFromU64(exports.renderHtml(src.ptr, src.len));
@@ -104,41 +121,33 @@ WebAssembly.instantiateStreaming(fetch("/wasm/demarkate.wasm"), importObject)
 
           free(src);
         }
-      }
 
-      const editor = document.getElementById("editor");
-      const preview = document.getElementById("preview");
-      var isPreview = false;
-
-      togglePreview = function() {
-        isPreview = !isPreview;
-
-        if (isPreview) {
-          render();
-          editor.style.display = "none";
-          preview.style.display = "block";
-        } else {
-          editor.style.display = "block";
-          preview.style.display = "none";
+        if (editor.value === "") {
+          preview.innerHTML = emptySourceHtml;
         }
       }
 
-      exportClicked = function() {
-        console.log(JSON.stringify(editor.value));
-      }
-
-      window.addEventListener("load", (event) => {
+      function onWindowLoad() {
         const savedText = localStorage.getItem("markdownText");
 
         if (savedText) {
           editor.value = savedText
+          render();
         }
 
-        // Save as user types
         editor.addEventListener("input", () => {
+          render();
           localStorage.setItem("markdownText", editor.value);
         });
-      });
+      }
+
+      if (document.readyState === "complete") {
+        onWindowLoad();
+      } else {
+        window.addEventListener("load", (event) => {
+          onWindowLoad();
+        });
+      }
     }
   )
   .catch(

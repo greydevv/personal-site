@@ -87,7 +87,7 @@ pub fn main() !void {
     // serving public files
     router.get("/js/htmx.min.js", getHtmxScript, .{});
     router.get("/js/navbar.js", getNavbarScript, .{});
-    router.get("/js/demarkate_wasm.js", getDemarkateWasmJs, .{});
+    router.get("/js/demarkate_editor.js", getDemarkateEditorJs, .{});
     router.get("/wasm/demarkate.wasm", getDemarkateWasm, .{});
     router.get("/css/output.css", getCssStylesheet, .{});
 
@@ -285,8 +285,8 @@ fn getDemarkate(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     try sendFile(res, "templates/resources/html/demarkate_editor.html", .HTML);
 }
 
-fn getDemarkateWasmJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "templates/resources/js/demarkate_wasm.js", .JS);
+fn getDemarkateEditorJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
+    try sendFile(res, "templates/resources/js/demarkate_editor.js", .JS);
 }
 
 fn getDemarkateWasm(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {

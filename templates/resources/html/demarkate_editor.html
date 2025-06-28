@@ -4,42 +4,33 @@
     <link rel="stylesheet" type="text/css" href="/css/output.css" />
   </head>
   <body class="h-screen px-4 pt-4">
-    <div class="h-full w-full grid grid-rows-[auto_1fr] grid-cols-1">
+    <div class="h-full w-full grid grid-rows-[auto_1fr] grid-cols-2">
       <!-- toggle -->
-      <div class="flex flex-row items-center justify-between p-2 rounded bg-stone-100">
+      <div class="row-start-1 col-span-2 flex flex-row items-center justify-between p-2 rounded bg-stone-100">
         <h4 class="text-stone-400">
           Demarkate Editor :)
         </h4>
-        <div class="flex flex-row gap-x-2">
-          <button
-            class="row-start-1 bg-stone-200 rounded font-bold p-2"
-            onClick="exportClicked();"
-          >
-            Export Source
-          </button>
-          <button
-            class="row-start-1 bg-stone-200 rounded font-bold p-2"
-            onClick="togglePreview();"
-          >
-            Toggle Preview
-          </button>
-        </div>
+        <button
+          class="row-start-1 bg-stone-200 rounded font-bold text-small p-2"
+          onClick="copySourceClicked();"
+        >
+          copy source
+        </button>
       </div>
 
       <!-- editor -->
       <textarea
-        class="w-full h-full row-start-2 py-4 font-mono resize-none text-sm border-none outline-none"
+        class="row-start-2 col-start-1 w-full h-full py-4 font-mono resize-none text-sm border-none outline-none"
         id="editor"
         placeholder="Write markup here..."
       ></textarea>
 
       <!-- preview -->
       <div
-        class="row-start-2 p-2 mx-auto max-w-[800px]"
+        class="row-start-2 col-start-2 row-start-2 py-4 mx-auto w-full max-w-[800px]"
         id="preview"
-        style="display: none;"
       ></div>
-      <script src="/js/demarkate_wasm.js"></script>
+      <script src="/js/demarkate_editor.js"></script>
     </div>
   </body>
 </html>
