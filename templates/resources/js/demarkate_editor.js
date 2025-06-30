@@ -1,24 +1,126 @@
-var getMemoryView = function() {
-  throw "WASM module not initialized"
+class WasmAllocator {
+  /**
+   * Creates the allocator and maintains a reference of the WASM module's
+   * function exports and memory.
+   */
+  constructor(exports) {
+    this.wasmAlloc = exports.alloc;
+    this.wasmFree = exports.free;
+
+    this.n_allocs = 0;
+    this.n_frees = 0;
+
+    this.exports = exports;
+    this._mem = new DataView(exports.memory.buffer);
+  }
+
+  /**
+   * Get the latest reference of the WASM memory.
+   */
+  get mem() {
+    if (this._mem.buffer !== this.exports.memory.buffer) {
+      this._mem = new DataView(this.exports.memory.buffer);
+    }
+
+    return this._mem;
+  }
+
+  /**
+   * Allocate a fixed number of bytes.
+   *
+   * Returns a pointer to the allocated bytes.
+   */
+  alloc(n) {
+    const ptr = this.wasmAlloc(n);
+    this.n_allocs += 1;
+    return ptr;
+  }
+
+  /**
+   * Free a number of bytes starting at the given pointer.
+   */
+  free(ptr, len) {
+    this.wasmFree(ptr, len);
+    this.n_frees += 1;
+  }
+
+  /**
+   * Dereference a number of bytes starting at the given pointer.
+   *
+   * Returns an ArrayBuffer containing the bytes.
+   */
+  deref(ptr, len) {
+    const bytes = this.mem.buffer.slice(ptr, ptr + len);
+    return bytes;
+  }
+
+  checkAllocsAndFrees() {
+    if (allocator.n_allocs !== allocator.n_frees) {
+      throw `Memory mismanagement: ${allocator.n_allocs} allocs vs. ${allocator.n_frees} frees`;
+    }
+  }
 }
 
-var copySourceClicked = function() {
-  throw "WASM module not initialized"
+var allocator = undefined;
+
+/**
+ * Allocates and sets a string in memory.
+ *
+ * Returns a slice pointing to the underlying bytes.
+ */
+function allocBytes(bytes) {
+  const ptr = allocator.alloc(bytes.length);
+
+  const dest = new Uint8Array(
+    allocator.mem.buffer,
+    ptr,
+    bytes.len
+  );
+
+  new TextEncoder().encodeInto(bytes, dest);
+
+  return Slice(ptr, bytes.length);
 }
 
-async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch (err) {
-    console.log("Failed to copy text to clipboard");
+function Slice(ptr, len) {
+  this.ptr = ptr;
+  this.len = len;
+
+  return {
+    ptr: this.ptr,
+    len: this.len,
+    deref: function() {
+      const bytes = allocator.deref(this.ptr, this.len);
+      return bytes;
+    }
+  };
+}
+
+/**
+ * Construct the output object from the given pointer.
+ */
+function Output(ptr) {
+  const mem = allocator.mem;
+
+  const err_code = allocator.mem.getInt32(ptr, true);
+  const slice = new Slice(
+    allocator.mem.getInt32(ptr + 4, true),
+    allocator.mem.getInt32(ptr + 8, true),
+  );
+
+  const string = new TextDecoder().decode(slice.deref());
+
+  return {
+    err_code: err_code,
+    string: string,
   }
 }
 
 const importObject = {
   env: {
     printBytes: function(ptr, len) {
-      let u8Array = getMemoryView().buffer.slice(ptr, ptr + len);
-      console.log(new TextDecoder().decode(u8Array))
+      const bytes = allocator.deref(ptr, len);
+      console.log(new TextDecoder().decode(bytes))
     },
     print: function(num) {
       console.log(num);
@@ -26,111 +128,71 @@ const importObject = {
   }
 }
 
-function asByteArrayWithOffset(view, offset) {
-  return new Uint8Array(
-    view.buffer,
-    view.byteOffset + offset,
-    view.byteLength - offset,
-  );
+var logSourceClicked = function() {
+  throw "WASM module not initialized";
 }
 
-function Slice(ptr, len) {
-  this.ptr = ptr;
-  this.len = len;
-
-  this.deref = () => {
-    const memoryView = getMemoryView();
-
-    const bytes = new Uint8Array(
-      memoryView.buffer,
-      this.ptr,
-      this.len,
-    );
-
-    return bytes;
-  }
-}
-
-function alloc(src) {
-  const ptr = 0;
-
-  const memoryView = getMemoryView();
-  const dest = new Uint8Array(
-    memoryView.buffer,
-    memoryView.byteOffset,
-    Math.min(src.length, memoryView.byteLength)
-  );
-
-  const { written: len } = new TextEncoder().encodeInto(src, dest);
-
-  return new Slice(ptr, len);
-}
-
-function free(slice) {
-  const memoryView = getMemoryView();
-
-  for (i = 0; i < slice.len; i++) {
-    const offset = slice.ptr + i;
-    memoryView.setUint8(offset, 0);
-  }
-}
-
-function sliceFromU64(u64) {
-  const view = new DataView(new ArrayBuffer(8), 0);
-  view.setBigUint64(0, u64, true);
-
-  return new Slice(
-    view.getUint32(0, true),
-    view.getUint32(0 + 4, true)
-  );
+var closeOutputClicked = function() {
+  throw "WASM module not initialized";
 }
 
 WebAssembly.instantiateStreaming(fetch("/wasm/demarkate.wasm"), importObject)
   .then(
     (obj) => {
       const exports = obj.instance.exports;
-      var memoryView = new DataView(exports.memory.buffer);
-
-      getMemoryView = function() {
-        if (memoryView.buffer !== exports.memory.buffer) {
-          memoryView = new DataView(exports.memory.buffer);
-        }
-
-        return memoryView
-      }
-
-      const emptySourceHtml = "<p>...and it will render as you type :)</p>"
       const editor = document.getElementById("editor");
       const preview = document.getElementById("preview");
-      preview.innerHTML = emptySourceHtml;
+      const error = document.getElementById("error");
+      const output_window = document.getElementById("output_window");
+      const raw_output = document.getElementById("output");
 
-      copySourceClicked = function() {
-        copyToClipboard(editor.value);
+      logSourceClicked = function() {
+        output_window.style.display = "block";
+        raw_output.textContent = JSON.stringify(editor.value);
+      }
+
+      closeOutputClicked = function() {
+        output_window.style.display = "none";
+        raw_output.textContent = "";
+      }
+
+      function setError(content) {
+        preview.style.display = "none";
+        error.style.display = "block";
+        error.innerHTML = content;
+      }
+
+      function setPreview(content) {
+        preview.style.display = "block";
+        error.style.display = "none";
+        preview.innerHTML = content;
       }
 
       function render() {
-        const src = alloc(editor.value);
-        const out = sliceFromU64(exports.renderHtml(src.ptr, src.len));
-
-        if (out.len > 0) {
-          const text = new TextDecoder().decode(out.deref());
-          preview.innerHTML = text;
-
-          free(src);
-        }
-
         if (editor.value === "") {
-          preview.innerHTML = emptySourceHtml;
+          setPreview("<p>...and it will render as you type :)</p>");
+          return;
         }
+
+        allocator = new WasmAllocator(exports);
+
+        const input = allocBytes(editor.value);
+        allocator.free(input.ptr, input.len);
+
+        const output = Output(exports.renderHtml(input.ptr, input.len));
+        if (output.err_code == 0) {
+          setPreview(output.string);
+        } else {
+          setError(`<p>error: ${output.string}</p>`);
+        }
+
+        allocator.checkAllocsAndFrees();
       }
 
       function onWindowLoad() {
         const savedText = localStorage.getItem("markdownText");
-
-        if (savedText) {
-          editor.value = savedText
-          render();
-        }
+        editor.value = savedText;
+        render();
 
         editor.addEventListener("input", () => {
           render();

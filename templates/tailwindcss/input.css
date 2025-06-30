@@ -15,7 +15,9 @@
   --color-primary: var(--color-stone-900);
   --color-subdued: var(--color-stone-500);
   --color-background: var(--color-stone-50);
-  --color-surface: var(--color-stone-200);
+  --color-surface-100: var(--color-stone-200);
+  --color-surface: var(--color-stone-100);
+  --color-error: var(--color-red-200);
 }
 
 @layer base {
