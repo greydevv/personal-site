@@ -129,7 +129,7 @@ const importObject = {
   }
 }
 
-var logSourceClicked = function() {
+var viewSourceClicked = function() {
   throw "WASM module not initialized";
 }
 
@@ -145,15 +145,18 @@ WebAssembly.instantiateStreaming(fetch("/wasm/demarkate.wasm"), importObject)
       const preview = document.getElementById("preview");
       const error = document.getElementById("error");
       const output_window = document.getElementById("output_window");
+      const translucent_dismisser = document.getElementById("translucent_dismisser")
       const raw_output = document.getElementById("output");
 
-      logSourceClicked = function() {
+      viewSourceClicked = function() {
         output_window.style.display = "block";
+        translucent_dismisser.style.display = "block";
         raw_output.textContent = JSON.stringify(editor.value);
       }
 
       closeOutputClicked = function() {
         output_window.style.display = "none";
+        translucent_dismisser.style.display = "none";
         raw_output.textContent = "";
       }
 

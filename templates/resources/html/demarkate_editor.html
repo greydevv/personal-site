@@ -3,64 +3,67 @@
   <head>
     <link rel="stylesheet" type="text/css" href="/css/output.css" />
   </head>
-  <body class="h-screen w-screen">
-    <div class="pt-4 px-4 h-full w-full grid grid-rows-[auto_1fr] grid-cols-2">
-      <div class="row-start-1 col-span-2 flex flex-row items-center justify-between p-2 rounded bg-surface">
+  <body class="h-screen w-screen overflow-y-hidden">
+    <div class="h-full w-full grid grid-rows-[auto_1fr] grid-cols-1">
+
+      <div class="row-start-1 flex flex-row items-center justify-between p-4 bg-surface">
         <h4 class="text-stone-400">
           Demarkate Editor
         </h4>
         <button
-          class="row-start-1 bg-surface-100 rounded font-bold text-small p-2"
-          onClick="logSourceClicked();"
+          class="bg-surface-100 rounded font-bold text-small p-2"
+          onClick="viewSourceClicked();"
         >
-          log source
+          view raw source
         </button>
       </div>
 
-      <!-- editor -->
-      <textarea
-        class="row-start-2 col-start-1 w-full h-full py-4 font-mono resize-none text-sm border-none outline-none"
-        id="editor"
-        placeholder="Write markup here..."
-      ></textarea>
+      <div class="row-start-2 overflow-y-auto grid grid-cols-2 gap-x-8 px-8 py-4 box-border">
+        <!-- editor -->
+        <textarea
+          class="col-start-1 w-full h-full font-mono overflow-y-clip resize-none text-sm border-none outline-none"
+          id="editor"
+          placeholder="Write markup here..."
+        ></textarea>
 
-      <div class="row-start-2 col-start-2 row-start-2 py-4 mx-auto w-full max-w-[800px]">
-        <!-- preview -->
-        <div
-          class="w-full wrap-break-word"
-          style="display: block;"
-          id="preview"
-        >
-        </div>
+        <div class="col-start-2 w-full max-w-[800px]">
+          <!-- preview -->
+          <div
+            class="w-full wrap-break-word"
+            style="display: block;"
+            id="preview"
+          >
+          </div>
 
-        <!-- error -->
-        <div
-          class="w-full p-2 rounded bg-error font-mono font-bold"
-          style="display: none;"
-          id="error"
-        >
+          <!-- error -->
+          <div
+            class="w-full p-2 rounded bg-error font-mono font-bold"
+            style="display: none;"
+            id="error"
+          >
+          </div>
         </div>
+        <script src="/js/demarkate_editor.js"></script>
       </div>
-      <script src="/js/demarkate_editor.js"></script>
     </div>
 
     <!-- output_window -->
     <div
-      class="bg-surface absolute bottom-0 overflow-y-scroll p-4 w-full h-[1/2]"
+      class="opacity-20 bg-black fixed w-screen h-screen top-0 left-0 z-1"
+      style="display: none;"
+      id="translucent_dismisser"
+      onClick="closeOutputClicked();"
+    ></div>
+
+    <div
+      class="bg-background absolute bottom-0 w-full h-[60%] overflow-y-auto px-8 py-4 z-100"
       style="display: none;"
       id="output_window"
     >
-      <div class="flex w-full justify-end">
-        <button
-          class="bg-surface-100 rounded font-bold text-small p-2"
-          onClick="closeOutputClicked();"
-        >
-          close
-        </button>
-      </div>
-
-      <!-- output -->
-      <pre class="font-mono wrap-break-word whitespace-pre-wrap w-full mt-2" id="output"></pre>
+      <pre
+        class="font-mono break-words whitespace-pre-wrap"
+        id="output"
+      ></pre>
     </div>
   </body>
 </html>
