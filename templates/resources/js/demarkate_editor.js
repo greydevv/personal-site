@@ -121,6 +121,7 @@ const importObject = {
     printBytes: function(ptr, len) {
       const bytes = allocator.deref(ptr, len);
       console.log(new TextDecoder().decode(bytes))
+      allocator.free(ptr, len);
     },
     print: function(num) {
       console.log(num);
