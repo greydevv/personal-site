@@ -10,13 +10,16 @@ pub fn render(
     const art_list_html = try artList(allocator, art);
     defer allocator.free(art_list_html);
 
+    const body = try std.fmt.allocPrint(
+        allocator,
+        @embedFile("index.html"),
+        .{ art_list_html }
+    );
+    defer allocator.free(body);
+
     return Layout.render(
         allocator,
-        try std.fmt.allocPrint(
-            allocator,
-            @embedFile("index.html"),
-            .{ art_list_html }
-        )
+        body
     );
 }
 
@@ -39,20 +42,17 @@ fn artList(
     defer left_col_html.deinit();
 
     var right_col_html = std.ArrayList(u8).init(allocator);
-    defer left_col_html.deinit();
+    defer right_col_html.deinit();
 
     for (art, 0..) |*art_item, i| {
         const item_html = try std.fmt.allocPrint(
             allocator,
-            \\ <div class="flex flex-col">
-            \\   <img 
-            \\     src="{s}/{s}"
-            \\     class="mb-2"
-            \\   >
-            \\   <h4>{s}</h4>
-            \\   <p class="italic">
-            \\     {s}
-            \\   </p>
+            \\ <div>
+            \\   <img src="{s}/{s}" class="mb-2">
+            \\   <div class="flex flex-row justify-between">
+            \\       <h4>{s}</h4>
+            \\       <p class="date">{s}</p>
+            \\   </div>
             \\ </div>
             , .{
                 dotenv.CDN_PREFIX,
@@ -70,9 +70,21 @@ fn artList(
         }
     }
 
+
     return try std.fmt.allocPrint(
         allocator,
         html_fmt,
         .{ left_col_html.items, right_col_html.items }
     );
+}
+
+test "route does not leak" {
+    const art = &.{
+        models.Art{ .title = "a", .medium = "a", .image_slug = "a" },
+        models.Art{ .title = "b", .medium = "b", .image_slug = "b" },
+    };
+
+    const allocator = std.testing.allocator;
+    const body = try render(allocator, art);
+    defer allocator.free(body);
 }

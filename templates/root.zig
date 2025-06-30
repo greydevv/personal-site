@@ -10,3 +10,7 @@ pub const post = @import("routes/post/post.zig");
 // JavaScript
 pub const htmx_script = @embedFile("resources/js/htmx.min.js");
 pub const navbar_script = @embedFile("resources/js/navbar.js");
+
+test {
+    @import("std").testing.refAllDecls(@This());
+}

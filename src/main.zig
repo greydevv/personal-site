@@ -111,6 +111,7 @@ fn sendFile(res: *httpz.Response, path: []const u8, content_type: httpz.ContentT
         std.log.err("openFile({s}): {s}\n", .{ path, @errorName(err) });
         return err;
     };
+    defer file.close();
 
     const body = file.readToEndAlloc(res.arena, 30000) catch |err| {
         std.log.err("readToEndAlloc({s}): {s}\n", .{ path, @errorName(err) });

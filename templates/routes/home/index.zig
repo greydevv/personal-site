@@ -6,13 +6,16 @@ pub fn render(allocator: std.mem.Allocator, posts: []const models.Post.Metadata)
     const posts_list_html = try postsList(allocator, posts);
     defer allocator.free(posts_list_html);
 
+    const body = try std.fmt.allocPrint(
+        allocator,
+        @embedFile("index.html"),
+        .{ posts_list_html }
+    );
+    defer allocator.free(body);
+
     return try Layout.render(
         allocator,
-        try std.fmt.allocPrint(
-            allocator,
-            @embedFile("index.html"),
-            .{ posts_list_html }
-        )
+        body
     );
 }
 
@@ -43,4 +46,15 @@ pub fn postsList(allocator: std.mem.Allocator, posts: []const models.Post.Metada
     }
 
     return html.toOwnedSlice();
+}
+
+test "route does not leak" {
+    const posts = &.{
+        models.Post.Metadata{ .title = "a", .slug = "a", .date = "a" },
+        models.Post.Metadata{ .title = "b", .slug = "b", .date = "b" },
+    };
+
+    const allocator = std.testing.allocator;
+    const body = try render(allocator, posts);
+    defer allocator.free(body);
 }

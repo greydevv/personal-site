@@ -22,13 +22,14 @@ pub fn render(allocator: std.mem.Allocator, work: []const models.Work) ![]const 
     }
 
     if (items_html_buf.items.len > 0) {
-        try sections_html.appendSlice(
-            try section(
+        const s = try section(
                 allocator,
                 "Now",
                 &items_html_buf
-            )
-        );
+            );
+        defer allocator.free(s);
+
+        try sections_html.appendSlice(s);
     }
 
     var current_year_start: u16 = 0;
@@ -41,13 +42,14 @@ pub fn render(allocator: std.mem.Allocator, work: []const models.Work) ![]const 
             // new section is started
             // drain buffer into section and append section
             if (items_html_buf.items.len > 0) {
-                try sections_html.appendSlice(
-                    try sectionWithYear(
+                const s = try sectionWithYear(
                         allocator,
                         current_year_start,
                         &items_html_buf
-                    )
-                );
+                    );
+                defer allocator.free(s);
+
+                try sections_html.appendSlice(s);
             }
 
             current_year_start = work_item.time_interval.year;
@@ -60,22 +62,26 @@ pub fn render(allocator: std.mem.Allocator, work: []const models.Work) ![]const 
     }
 
     if (items_html_buf.items.len > 0) {
-        try sections_html.appendSlice(
-            try sectionWithYear(
-                allocator,
-                current_year_start,
-                &items_html_buf
-            )
+        const s = try sectionWithYear(
+            allocator,
+            current_year_start,
+            &items_html_buf
         );
+        defer allocator.free(s);
+
+        try sections_html.appendSlice(s);
     }
+
+    const body = try std.fmt.allocPrint(
+        allocator,
+        @embedFile("index.html"),
+        .{ sections_html.items }
+    );
+    defer allocator.free(body);
 
     return Layout.render(
         allocator,
-        try std.fmt.allocPrint(
-            allocator,
-            @embedFile("index.html"),
-            .{ sections_html.items }
-        )
+        body
     );
 }
 
@@ -89,6 +95,7 @@ fn sectionWithYear(
         "{}",
         .{ year }
     );
+    defer allocator.free(heading);
 
     return section(allocator, heading, items_html_buf);
 }
@@ -107,13 +114,16 @@ fn item(
     );
     defer allocator.free(logo_url);
 
+    const interval_text = try intervalText(allocator, work_item);
+    defer allocator.free(interval_text);
+
     return std.fmt.allocPrint(
         allocator,
         @embedFile("item.html"),
         .{
             logo_url,
             work_item.title,
-            try intervalText(allocator, work_item),
+            interval_text,
             work_item.description
         }
     );
@@ -174,4 +184,30 @@ fn intervalText(allocator: std.mem.Allocator, work_item: *const models.Work) ![]
             }
         );
     }
+}
+
+fn _mockWork(year: u16, month: u8, num_months: ?i32) models.Work {
+    return .{
+        .title = "",
+        .subtitle = "",
+        .description = "",
+        .icon_slug = "",
+        .time_interval = .{
+            .year = year,
+            .month = month,
+            .num_months = num_months,
+        }
+    };
+}
+
+test "route does not leak" {
+    const work = &.{
+        _mockWork(2024, 1, null),
+        _mockWork(2023, 1, 2),
+        _mockWork(2022, 1, 2),
+    };
+
+    const allocator = std.testing.allocator;
+    const body = try render(allocator, work);
+    defer allocator.free(body);
 }
