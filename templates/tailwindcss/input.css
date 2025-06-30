@@ -21,6 +21,10 @@
 }
 
 @layer base {
+  html {
+    @apply bg-background;
+  }
+
   h1 {
     @apply text-2xl font-bold mb-2;
   }
@@ -74,4 +78,8 @@ code {
 
 .dmk_line_break {
   @apply h-4 w-full;
+}
+
+html {
+  display: block !important;
 }
