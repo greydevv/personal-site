@@ -12,8 +12,8 @@
             .hash = "pg-0.0.0-Wp_7gbUCBgDKnG4DdG3eOKe1uKcnQf90G3nM1tTUR8o8",
         },
         .demarkate = .{
-            .url = "https://github.com/greydevv/demarkate/archive/refs/tags/0.0.0-alpha.2.tar.gz",
-            .hash = "demarkate-0.0.0-alpha.1-K442QZnQAAALdJqSb3yPbvhLuoK8iPKnxU4y5-veqqDI",
+            .url = "https://github.com/greydevv/demarkate/archive/refs/tags/0.0.0-alpha.3.tar.gz",
+            .hash = "demarkate-0.0.0-alpha.1-K442QdLUAABfdc134z61DOlYLo0fDcWjEARAiojJcHC-",
         },
     },
     .paths = .{
