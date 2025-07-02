@@ -101,6 +101,7 @@ pub fn main() !void {
     router.get("/work", getWork, .{});
     router.get("/art", getArt, .{});
     router.get("/post/:slug", getPost, .{});
+    router.get("/js/post.js", getPostJs, .{});
     router.get("/demarkate", getDemarkate, .{});
 
     // serving .well-known files
@@ -295,6 +296,9 @@ fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
     res.content_type = .HTML;
 }
 
+fn getPostJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
+    try sendFile(res, "templates/routes/post/post.js", .JS);
+}
 
 fn getDemarkate(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     try sendFile(res, "templates/resources/html/demarkate_editor.html", .HTML);

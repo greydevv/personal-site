@@ -46,16 +46,6 @@ pub fn build(b: *std.Build) void {
         templates_mod.addImport("dotenv", dotenv);
     }
 
-    // Dependency: demarkate
-    {
-        const demarkate = b.dependency("demarkate", .{
-            .target = target,
-            .optimize = optimize,
-        });
-
-        templates_mod.addImport("demarkate", demarkate.module("demarkate"));
-    }
-
     // Dependency: httpz
     {
         const httpz = b.dependency("httpz", .{
