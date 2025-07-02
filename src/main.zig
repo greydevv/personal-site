@@ -307,3 +307,12 @@ fn getDemarkateEditorJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !v
 fn getDemarkateWasm(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     try sendFile(res, build_options.wasm_install_path, .WASM);
 }
+
+test "sending a file does not leak" {
+    var server = httpz.testing.init(.{});
+    defer server.deinit();
+
+    server.url("/wasm/demarkate.wasm");
+
+    try server.expectStatus(200);
+}
