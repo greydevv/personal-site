@@ -91,6 +91,11 @@ pub fn main() !void {
     router.get("/wasm/demarkate.wasm", getDemarkateWasm, .{});
     router.get("/css/output.css", getCssStylesheet, .{});
 
+    router.get("/public/favicon-32.png", getFavicon, .{});
+    router.get("/public/favicon-180.png", getFavicon, .{});
+    router.get("/public/favicon-192.png", getFavicon, .{});
+    router.get("/public/favicon.png", getFavicon, .{});
+
     // serving html
     router.get("/", getHome, .{});
     router.get("/work", getWork, .{});
@@ -149,6 +154,10 @@ fn getCssStylesheet(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void 
     try sendFile(res, build_options.css_install_path, .CSS);
 }
 
+fn getFavicon(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
+    try sendFile(res, "public/favicon-32.png", .PNG);
+}
+
 fn getChromeDevToolsJson(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     res.status = 204;
     res.content_type = .JSON;
@@ -162,7 +171,11 @@ fn getHome(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     );
     defer result.deinit();
 
-    var posts = std.ArrayList(models.Post.Metadata).init(res.arena);
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    var posts = std.ArrayList(models.Post.Metadata).init(allocator);
     defer posts.deinit();
 
     var mapper = result.mapper(models.Post.Metadata, .{});
@@ -281,6 +294,7 @@ fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
 
     res.content_type = .HTML;
 }
+
 
 fn getDemarkate(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     try sendFile(res, "templates/resources/html/demarkate_editor.html", .HTML);
