@@ -64,6 +64,10 @@
   @apply p-2 rounded bg-surface;
 }
 
+.dmk_document > .dmk_callout_error {
+  @apply p-2 rounded bg-error;
+}
+
 .dmk_document pre {
   @apply p-2 rounded bg-surface font-mono;
 }

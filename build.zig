@@ -14,7 +14,7 @@ pub fn build(b: *std.Build) void {
 
     // Module: templates
     const templates_mod = b.createModule(.{
-        .root_source_file = b.path("templates/root.zig"),
+        .root_source_file = b.path("src/templates/root.zig"),
         .target = target,
         .optimize = optimize,
     });
@@ -22,7 +22,7 @@ pub fn build(b: *std.Build) void {
 
     // Module: models
     const models_mod = b.createModule(.{
-        .root_source_file = b.path("models/root.zig"),
+        .root_source_file = b.path("src/models/root.zig"),
         .target = target,
         .optimize = optimize
     });
@@ -156,7 +156,7 @@ fn demarkateWasmStep(b: *std.Build, install_path: []const u8) *std.Build.Step {
 fn tailwindCssStep(b: *std.Build, install_path: []const u8) *std.Build.Step {
     const generate_css_cmd = b.addSystemCommand(&.{
         "tailwindcss",
-        "-i", "templates/tailwindcss/input.css", // input file
+        "-i", "tailwindcss/input.css", // input file
         "-o", install_path, // output file
         "--minify"
     });

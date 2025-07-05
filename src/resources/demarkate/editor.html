@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" class="font-sans">
   <head>
-    <link rel="stylesheet" type="text/css" href="/css/output.css" />
+    <link rel="stylesheet" type="text/css" href="/resources/output.css" />
   </head>
   <body class="h-screen w-screen overflow-y-hidden">
-    <div class="h-full w-full grid grid-rows-[auto_1fr] grid-cols-1">
-
-      <div class="row-start-1 flex flex-row items-center justify-between p-4 bg-surface">
+    <div class="grid h-full w-full grid-cols-1 grid-rows-[auto_1fr]">
+      <div class="row-start-1 flex flex-row items-center justify-between bg-surface p-4">
         <h4 class="text-stone-400">
           Demarkate Editor
         </h4>
         <button
-          class="bg-surface-100 rounded font-bold text-small p-2"
+          class="rounded bg-surface-100 p-2 font-bold text-small"
           onClick="viewSourceClicked();"
         >
           view raw source
         </button>
       </div>
-
-      <div class="row-start-2 overflow-y-auto grid grid-cols-2 gap-x-8 px-8 py-4 box-border">
+      <div class="row-start-2 grid grid-cols-2 gap-x-8 overflow-y-auto px-8 py-4 box-border">
         <!-- editor -->
         <textarea
-          class="col-start-1 w-full h-full font-mono overflow-y-clip resize-none text-sm border-none outline-none"
+          class="col-start-1 h-full w-full resize-none overflow-y-clip border-none font-mono text-sm outline-none"
           id="editor"
           placeholder="Write markup here..."
         ></textarea>
-
         <div class="col-start-2 w-full max-w-[800px]">
           <!-- preview -->
           <div
@@ -34,34 +31,32 @@
             id="preview"
           >
           </div>
-
           <!-- error -->
           <div
-            class="w-full p-2 rounded bg-error font-mono font-bold"
+            class="w-full rounded bg-error p-2 font-mono font-bold"
             style="display: none;"
             id="error"
           >
           </div>
         </div>
-        <script src="/js/demarkate_editor.js"></script>
+        <script src="/resources/demarkate/shim.js"></script>
+        <script type="module" src="/resources/demarkate/editor.js"></script>
       </div>
     </div>
-
     <!-- output_window -->
     <div
-      class="opacity-20 bg-black fixed w-screen h-screen top-0 left-0 z-1"
+      class="fixed top-0 left-0 z-1 h-screen w-screen bg-black opacity-20"
       style="display: none;"
       id="translucent_dismisser"
       onClick="closeOutputClicked();"
     ></div>
-
     <div
-      class="bg-background absolute bottom-0 w-full h-[60%] overflow-y-auto px-8 py-4 z-100"
+      class="absolute bottom-0 z-100 h-[60%] w-full overflow-y-auto bg-background px-8 py-4"
       style="display: none;"
       id="output_window"
     >
       <pre
-        class="font-mono break-words whitespace-pre-wrap"
+        class="font-mono whitespace-pre-wrap break-words"
         id="output"
       ></pre>
     </div>

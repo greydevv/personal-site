@@ -1,12 +1,12 @@
 const std = @import("std");
 const builtin = @import("builtin");
-const build_options = @import("build_options");
 
 const httpz = @import("httpz");
 const pg = @import("pg");
 const dotenv = @import("dotenv");
 const models = @import("models");
 const templates = @import("templates");
+const manifest = @import("manifest.zig");
 
 pub const pg_stderr_tls = true;
 
@@ -37,14 +37,11 @@ const Handler = struct {
     }
 
     pub fn notFound(_: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
-        std.log.err("not found: {s}\n", .{ req.url.path });
+        std.log.err("not found: {s}", .{ req.url.path });
+        // TODO: how to prevent this file from being read when bots are
+        // requesting this resource?
+        try sendFile(res, manifest.fourOhFour, .HTML);
         res.status = 404;
-
-        if (std.mem.eql(u8, req.url.path, "/favicon.ico")) {
-            // TODO: Is it OK to send nothing?
-        } else {
-            res.body = templates.fourOhFour;
-        }
     }
 
     pub fn uncaughtError(self: *Handler, req: *httpz.Request, res: *httpz.Response, err: anyerror) void {
@@ -68,13 +65,17 @@ pub fn main() !void {
     var handler = try Handler.init(allocator);
     defer handler.deinit();
 
-    var server = try httpz.Server(*Handler).init(allocator, .{
-        .port = dotenv.HTTP_SERVER_PORT,
-        .address = dotenv.HTTP_SERVER_ADDRESS,
-        .request = .{
-            .max_form_count = 20
-        }
-    }, &handler);
+    var server = try httpz.Server(*Handler).init(
+        allocator,
+        .{
+            .port = dotenv.HTTP_SERVER_PORT,
+            .address = dotenv.HTTP_SERVER_ADDRESS,
+            .request = .{
+                .max_form_count = 20
+            }
+        },
+        &handler
+    );
 
     defer server.deinit();
     defer server.stop();
@@ -82,34 +83,33 @@ pub fn main() !void {
     var router = try server.router(.{});
 
     // AWS health check
-    router.get("/healthcheck", performHealthCheck, .{});
+    router.get("/healthcheck", healthCheck, .{});
 
-    // serving public files
-    router.get("/js/htmx.min.js", getHtmxScript, .{});
-    router.get("/js/navbar.js", getNavbarScript, .{});
-    router.get("/js/demarkate_editor.js", getDemarkateEditorJs, .{});
-    router.get("/wasm/demarkate.wasm", getDemarkateWasm, .{});
-    router.get("/css/output.css", getCssStylesheet, .{});
-
-    router.get("/public/favicon-32.png", getFavicon, .{});
-    router.get("/public/favicon-180.png", getFavicon, .{});
-    router.get("/public/favicon-192.png", getFavicon, .{});
-    router.get("/public/favicon.png", getFavicon, .{});
-
-    // serving html
+    // routes
     router.get("/", getHome, .{});
     router.get("/work", getWork, .{});
     router.get("/art", getArt, .{});
     router.get("/post/:slug", getPost, .{});
-    router.get("/js/post.js", getPostJs, .{});
     router.get("/demarkate", getDemarkate, .{});
 
-    // serving .well-known files
+    // static resources
+    router.get("/resources/*", staticResource, .{});
     router.get("/.well-known/appspecific/com.chrome.devtools.json", getChromeDevToolsJson, .{});
 
     std.log.info("Listening http://{s}:{d}/\n", .{ server.config.address.?, server.config.port.? });
 
     try server.listen();
+}
+
+fn staticResource(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
+    inline for (manifest.static) |resource| {
+        if (std.mem.eql(u8, req.url.path, resource.req_path)) {
+            try sendFile(res, resource.file_path, resource.content_type);
+            return;
+        }
+    }
+
+    return handler.notFound(req, res);
 }
 
 fn sendFile(res: *httpz.Response, path: []const u8, content_type: httpz.ContentType) !void {
@@ -119,44 +119,23 @@ fn sendFile(res: *httpz.Response, path: []const u8, content_type: httpz.ContentT
     };
     defer file.close();
 
-    const body = file.readToEndAlloc(res.arena, 30000) catch |err| {
+    res.body = file.readToEndAlloc(res.arena, 30000) catch |err| {
         std.log.err("readToEndAlloc({s}): {s}\n", .{ path, @errorName(err) });
         return err;
     };
 
-    std.log.info("\"{s}\" read ({} bytes)", .{ path, body.len });
-
     res.status = 200;
-    res.body = body;
     res.content_type = content_type;
+
+    std.log.info("\"{s}\" read ({} bytes)", .{ path, res.body.len });
 }
 
-fn performHealthCheck(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
+fn healthCheck(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     std.log.info("handling /healthcheck", .{});
 
     res.status = 200;
     res.body = "OK";
     res.content_type = .HTML;
-}
-
-fn getHtmxScript(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    res.status = 200;
-    res.body = templates.htmx_script;
-    res.content_type = .JS;
-}
-
-fn getNavbarScript(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    res.status = 200;
-    res.body = templates.navbar_script;
-    res.content_type = .JS;
-}
-
-fn getCssStylesheet(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, build_options.css_install_path, .CSS);
-}
-
-fn getFavicon(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "public/favicon-32.png", .PNG);
 }
 
 fn getChromeDevToolsJson(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
@@ -238,15 +217,6 @@ fn getWork(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     res.content_type = .HTML;
 }
 
-fn numericToValue(comptime T: type, numeric: pg.Numeric) T {
-    const value = std.mem.bytesToValue(u16, numeric.digits);
-
-    switch (builtin.cpu.arch.endian()) {
-        .big => return @truncate(value),
-        .little => return @truncate(@byteSwap(value)),
-    }
-}
-
 fn getArt(handler: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
     var result = try handler.pool.queryOpts(
         "SELECT title, medium, image_slug FROM art ORDER BY date DESC",
@@ -288,35 +258,21 @@ fn getPost(handler: *Handler, req: *httpz.Request, res: *httpz.Response) !void {
 
         res.status = 200;
         res.body = try templates.post.render(res.arena, &post);
+        res.content_type = .HTML;
     } else {
-        res.status = 404;
-        res.body = templates.fourOhFour;
+        return handler.notFound(req, res);
     }
-
-    res.content_type = .HTML;
-}
-
-fn getPostJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "templates/routes/post/post.js", .JS);
 }
 
 fn getDemarkate(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "templates/resources/html/demarkate_editor.html", .HTML);
+    try sendFile(res, "src/resources/demarkate/editor.html", .HTML);
 }
 
-fn getDemarkateEditorJs(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, "templates/resources/js/demarkate_editor.js", .JS);
-}
+fn numericToValue(comptime T: type, numeric: pg.Numeric) T {
+    const value = std.mem.bytesToValue(u16, numeric.digits);
 
-fn getDemarkateWasm(_: *Handler, _: *httpz.Request, res: *httpz.Response) !void {
-    try sendFile(res, build_options.wasm_install_path, .WASM);
-}
-
-test "sending a file does not leak" {
-    var server = httpz.testing.init(.{});
-    defer server.deinit();
-
-    server.url("/wasm/demarkate.wasm");
-
-    try server.expectStatus(200);
+    switch (builtin.cpu.arch.endian()) {
+        .big => return @truncate(value),
+        .little => return @truncate(@byteSwap(value)),
+    }
 }
