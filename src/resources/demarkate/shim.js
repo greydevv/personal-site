@@ -144,12 +144,12 @@ async function initializeWasmModule() {
       this.allocator.free(input.ptr, input.len);
       this.allocator.checkAllocsAndFrees();
 
-      if (output.err_code == 0) {
-        const outputBuf = this.allocator.deref(output.slice.ptr, output.slice.len);
-        return new TextDecoder().decode(outputBuf);
-      } else {
-        return null;
-      }
+      const outputBuf = this.allocator.deref(output.slice.ptr, output.slice.len);
+
+      return {
+        err_code: output.err_code,
+        html: new TextDecoder().decode(outputBuf)
+      };
     }
   };
 }

@@ -4,11 +4,11 @@ function render() {
   const body = document.getElementById("body");
   const output = module.render(body.innerHTML);
 
-  if (output === null) {
-    body.innerHTML = "<p>Something went wrong :(</p>"
-  } else {
+  if (output.err_code === 0) {
     body.style.display = "block";
-    body.innerHTML = output;
+    body.innerHTML = output.html;
+  } else {
+    body.innerHTML = "<p>Something went wrong :(</p>"
   }
 }
 
