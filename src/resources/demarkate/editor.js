@@ -10,7 +10,7 @@ const raw_output = document.getElementById("output");
 window.viewSourceClicked = function() {
   output_window.style.display = "block";
   translucent_dismisser.style.display = "block";
-  raw_output.textContent = JSON.stringify(editor.textContent);
+  raw_output.textContent = JSON.stringify(editor.value);
 }
 
 window.closeOutputClicked = function() {
@@ -32,12 +32,12 @@ function setPreview(content) {
 }
 
 function render() {
-  if (editor.textContent === "") {
+  if (editor.value === "") {
     setPreview("<p>...and it will render as you type :)</p>");
     return;
   }
 
-  const output = module.render(editor.textContent)
+  const output = module.render(editor.value)
   if (output.err_code === 0) {
     setPreview(output.html);
   } else {
@@ -47,12 +47,12 @@ function render() {
 
 function onWindowLoad() {
   const savedText = localStorage.getItem("markdownText");
-  editor.textContent = savedText;
+  editor.value = savedText;
   render();
 
   editor.addEventListener("input", () => {
     render();
-    localStorage.setItem("markdownText", editor.textContent);
+    localStorage.setItem("markdownText", editor.value);
   });
 }
 
