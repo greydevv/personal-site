@@ -6,7 +6,13 @@
 
   <body class="h-full w-full flex flex-col overflow-hidden">
     <div class="flex items-center justify-between bg-surface p-4">
-      <h4 class="text-stone-400">Demarkate Editor</h4>
+      <div>
+        <h4 class="text-stone-400">Demarkate Editor</h4>
+        <div class="text-xs text-stone-500 font-mono">
+          <div id="avg-speed-display">N/A</div>
+          <div id="mem-usage-display">N/A</div>
+        </div>
+      </div>
       <button
         class="rounded bg-surface-100 p-2 text-small font-bold"
         onclick="viewSourceClicked()"
