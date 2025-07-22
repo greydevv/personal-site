@@ -53,12 +53,6 @@ class WasmAllocator {
     const bytes = this.mem.buffer.slice(ptr, ptr + len);
     return bytes;
   }
-
-  checkAllocsAndFrees() {
-    if (this.n_allocs !== this.n_frees) {
-      console.warn(`Memory mismanagement: ${this.n_allocs} allocs vs. ${this.n_frees} frees`);
-    }
-  }
 }
 
 /**
@@ -142,14 +136,17 @@ async function initializeWasmModule() {
       const output = Output(this.allocator, output_ptr);
 
       this.allocator.free(input.ptr, input.len);
-      this.allocator.checkAllocsAndFrees();
 
       const outputBuf = this.allocator.deref(output.slice.ptr, output.slice.len);
 
-      return {
+      const result = {
         err_code: output.err_code,
         html: new TextDecoder().decode(outputBuf)
       };
+
+      this.allocator.free(output.slice.ptr, output.slice.len);
+
+      return result;
     }
   };
 }
