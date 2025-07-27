@@ -97,6 +97,7 @@ pub fn build(b: *std.Build) void {
             "wasm_install_path",
             wasm_install_path
         );
+
         run_step.dependOn(demarkateWasmStep(b, "wasm/"));
 
         // generate tailwind CSS classes
@@ -133,7 +134,7 @@ pub fn build(b: *std.Build) void {
 /// Create the step to emit a .wasm file from demarkate.
 fn demarkateWasmStep(b: *std.Build, install_path: []const u8) *std.Build.Step {
     const demarkate = b.dependency("demarkate", .{
-        .wasm = true,
+        .@"emit-wasm" = true,
         .optimize = std.builtin.OptimizeMode.ReleaseSmall,
     });
 
