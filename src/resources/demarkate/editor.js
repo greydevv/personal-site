@@ -18,6 +18,10 @@ function updateDebugDisplay(memoryUsage) {
   avg_speed_el.textContent = `${duration}ms`;
 }
 
+window.themeToggled = function() {
+  document.documentElement.classList.toggle("dark");
+}
+
 window.viewSourceClicked = function() {
   output_window.style.display = "block";
   translucent_dismisser.style.display = "block";

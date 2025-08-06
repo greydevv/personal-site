@@ -5,7 +5,7 @@
   </head>
 
   <body class="h-full w-full flex flex-col overflow-hidden">
-    <div class="flex items-center justify-between bg-surface p-4">
+    <div class="flex items-center justify-between bg-surface dark:bg-surface-dark p-4">
       <div>
         <h4 class="text-stone-400">Demarkate Editor</h4>
         <div class="text-xs text-stone-500 font-mono">
@@ -13,19 +13,25 @@
           <div id="mem-usage-display">N/A</div>
         </div>
       </div>
-      <button
-        class="rounded bg-surface-100 p-2 text-small font-bold"
-        onclick="viewSourceClicked()"
-      >
-        view raw source
-      </button>
+      <div class="flex flex-row gap-x-4">
+        <input
+          type="checkbox"
+          onclick="themeToggled()"
+        >
+        <button
+          class="rounded bg-surface-100 dark:bg-surface-100-dark p-2 text-small font-bold"
+          onclick="viewSourceClicked()"
+        >
+          view raw source
+        </button>
+      </div>
     </div>
 
     <div class="flex-1 overflow-y-auto grid grid-cols-2 gap-x-8 px-8 pt-4 box-border">
       <div class="flex flex-col">
         <textarea
           id="editor"
-          class="w-full font-mono text-sm whitespace-pre-wrap break-words outline-none pb-8 resize-none border-0 bg-transparent flex-1 field-sizing-content"
+          class="w-full font-mono text-sm whitespace-pre-wrap break-words outline-none pb-8 resize-none border-0 bg-transparent flex-1 field-sizing-content text-primary dark:text-primary-dark"
           placeholder="Write markup here..."
         ></textarea>
       </div>
@@ -44,12 +50,12 @@
       onclick="closeOutputClicked();"
     ></div>
     <div
-      class="absolute bottom-0 z-100 h-[60%] w-full overflow-y-auto bg-background px-8 py-4"
+      class="absolute bottom-0 z-100 h-[60%] w-full overflow-y-auto bg-background dark:bg-background-dark px-8 py-4"
       style="display: none;"
       id="output_window"
     >
       <pre
-        class="font-mono whitespace-pre-wrap break-words"
+        class="font-mono whitespace-pre-wrap break-words text-primary dark:text-primary-dark"
         id="output"
       ></pre>
     </div>

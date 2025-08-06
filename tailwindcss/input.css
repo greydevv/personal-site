@@ -7,22 +7,31 @@
 @tailwind utilities;
 @tailwind components;
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-serif: "Spectral", "serif";
   --font-sans: "Red Hat Text", "sans-serif";
   --font-mono: "IBM Plex Mono", "mono";
 
   --color-primary: var(--color-stone-900);
+  --color-primary-dark: var(--color-stone-400);
+
   --color-subdued: var(--color-stone-500);
+
   --color-background: var(--color-stone-50);
+  --color-background-dark: var(--color-stone-900);
+
   --color-surface-100: var(--color-stone-200);
+  --color-surface-100-dark: var(--color-stone-700);
   --color-surface: var(--color-stone-100);
+  --color-surface-dark: var(--color-stone-800);
   --color-error: var(--color-red-200);
 }
 
 @layer base {
   html {
-    @apply bg-background;
+    @apply bg-background dark:bg-background-dark;
   }
 
   h1 {
@@ -53,7 +62,7 @@
 }
 
 .dmk_document {
-  @apply font-sans;
+  @apply font-sans text-primary dark:text-primary-dark;
 } 
 
 .dmk_document a {
@@ -61,7 +70,7 @@
 }
 
 .dmk_document > .dmk_callout_hint {
-  @apply p-2 rounded bg-surface;
+  @apply p-2 rounded bg-surface dark:bg-surface-dark text-primary dark:text-primary-dark;
 }
 
 .dmk_document > .dmk_callout_error {
@@ -69,11 +78,11 @@
 }
 
 .dmk_document pre {
-  @apply p-2 rounded bg-surface font-mono;
+  @apply p-2 rounded bg-surface dark:bg-surface-dark text-primary dark:text-primary-dark font-mono;
 }
 
 .dmk_inline_code {
-  @apply px-2 py-[2px] rounded bg-surface font-mono text-center;
+  @apply px-2 py-[2px] rounded bg-surface dark:bg-surface-dark text-primary dark:text-primary-dark font-mono text-center;
 }
 
 code {
