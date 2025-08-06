@@ -4,8 +4,9 @@ const editor = document.getElementById("editor");
 const preview = document.getElementById("preview");
 const error = document.getElementById("error");
 const output_window = document.getElementById("output_window");
-const translucent_dismisser = document.getElementById("translucent_dismisser")
+const translucent_dismisser = document.getElementById("translucent_dismisser");
 const raw_output = document.getElementById("output");
+const theme_toggle = document.getElementById("theme-toggle");
 
 let duration = 0;
 
@@ -20,6 +21,12 @@ function updateDebugDisplay(memoryUsage) {
 
 window.themeToggled = function() {
   document.documentElement.classList.toggle("dark");
+  if (document.documentElement.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+    theme_toggle.checked = true;
+  } else {
+    localStorage.setItem("theme", "light");
+  }
 }
 
 window.viewSourceClicked = function() {
@@ -70,6 +77,10 @@ function onWindowLoad() {
   const saved_text = localStorage.getItem("markdownText");
   editor.value = saved_text;
   render();
+
+  if (localStorage.getItem("theme") === "dark") {
+    themeToggled();
+  }
 
   editor.addEventListener("input", () => {
     render();
